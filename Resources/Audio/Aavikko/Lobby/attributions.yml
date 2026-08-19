@@ -1,0 +1,34 @@
+- files: ["wehtle2.ogg"]
+  license: "CC-BY-NC-SA-3.0"
+  copyright: "weh.wmv by KoboldCommando"
+  source: "https://www.youtube.com/watch?v=VSoPMq0vy84"
+
+- files: ["tin_tin_mkII.ogg"]
+  license: "CC-BY-NC-SA-3.0"
+  copyright: "Space Station 14 - Tin Tin On Moon Mark II by pinkblossom6."
+  source: "https://www.youtube.com/watch?v=d7hc_GrZP4Y"
+
+- files: ["fifty_million_year_trip.ogg"]
+  license: "CC-BY-NC-SA-3.0"
+  copyright: "50 Million Year Trip by Carl Casey"
+  source: "https://www.youtube.com/watch?v=twZyi2mu2mg"
+
+- files: ["interlinked.ogg"]
+  license: "CC-BY-NC-SA-3.0"
+  copyright: "Interlinked by Lonely Lies"
+  source: "https://www.youtube.com/watch?v=aKCi0nY2Ouw"
+
+- files: ["clown.wmv.ogg"]
+  license: "CC-BY-NC-SA-3.0"
+  copyright: "Clown.wmv by Hugo"
+  source: "https://youtu.be/9whQIbNmu9s"
+
+- files: ["sb_computations.ogg"]
+  license: "CC-BY-4.0"
+  copyright: "'Computations in a Snowstorm' by Scott Buckley"
+  source: "www.scottbuckley.com.au"
+
+- files: ["sb_theclimb.ogg"]
+  license: "CC-BY-4.0"
+  copyright: "'The Climb' by Scott Buckley"
+  source: "www.scottbuckley.com.au"

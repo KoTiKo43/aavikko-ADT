@@ -1,0 +1,9 @@
+- files: ["crate_close.ogg", "crate_open.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "made by lawnjelly"
+  source: "https://freesound.org/people/lawnjelly/sounds/156892/"
+
+- files: ["closet_close.ogg", "closet_open.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "from TG Station SS13 build"
+  source: "taken from FluffySTG build"
