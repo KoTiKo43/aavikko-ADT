@@ -51,7 +51,7 @@ maxcharacterslots = 10           # Макс. слотов персонажей (
 role_loadout_timers = false
 role_timers = false
 auto_map_vote = true
-minimum_job_fallback = 3     # Закидывание за роль командования при низком количестве людей в отделе (дефолт: 2; 3 - отключить)
+#minimum_job_fallback = 3     # (Выкл для ADT) Закидывание за роль командования при низком количестве людей в отделе (дефолт: 2; 3 - отключить)
 # --- Panic Bunker (защита от рейдов) ---
 [game.panic_bunker]
 #enabled = false                  # Включить panic bunker (дефолт)
