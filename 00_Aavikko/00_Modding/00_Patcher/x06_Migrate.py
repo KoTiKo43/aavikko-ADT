@@ -49,8 +49,8 @@ from l01_ui import (
 #   parent²      = .../00_Aavikko/00_Modding/
 #   parent³      = .../Corvax_Clean/   ← build_root
 #   parent⁴      = .../ss14_builds/    ← builds_root (contains Corvax_Clean/ + Aavikko-2.0/)
-_SCRIPT_PATH = Path(__file__).resolve()
-_BUILD_ROOT = _SCRIPT_PATH.parent.parent.parent  # Corvax_Clean/
+_SCRIPT_PATH = Path(__file__).resolve().parent  # directory of this script
+_BUILD_ROOT = _SCRIPT_PATH.parent.parent.parent  # 00_Patcher → 00_Modding → 00_Aavikko → build_root
 _BUILDS_ROOT = _BUILD_ROOT.parent                 # contains Corvax_Clean/, Aavikko-2.0/, etc.
 
 DEFAULT_AAVIKKO_SRC = str(_BUILDS_ROOT / "Aavikko-Avaruus-ADT" / "Resources")
