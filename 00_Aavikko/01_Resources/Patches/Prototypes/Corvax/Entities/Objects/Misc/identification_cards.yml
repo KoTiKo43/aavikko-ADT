@@ -1,0 +1,43 @@
+- type: entity
+  parent: IDCardStandard
+  id: IAAIDCard
+  name: internal affairs agent ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: silver
+    - state: stripe_top
+      color: &color-command-top "#404783" # aavikko icons resprite
+    - state: stripe_bottom
+      color: &color-command-bottom "#332f58" # aavikko icons resprite
+    - state: job_icon_top
+      color: *color-command-top # aavikko icons resprite
+    - state: job_icon_bottom
+      color: *color-command-bottom # aavikko icons resprite
+    - sprite: &icon-rsi Interface/Misc/job_icons.rsi
+      offset: &icon-offset -0.1875, 0 # 6 pixels left aavikko icons resprite #-0.09375, 0.0625 #3 pixels left, 2 pixels up
+      state: IAA
+  - type: PresetIdCard
+    job: IAA
+
+- type: entity
+  parent: IDCardStandard
+  id: PilotIDCard
+  name: pilot ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: default
+    - state: stripe_top
+      color: &color-security-top "#88242d" # aavikko icons resprite
+    - state: stripe_bottom
+      color: &color-security-bottom "#501726" # aavikko icons resprite
+    - state: job_icon_top
+      color: *color-security-top # aavikko icons resprite
+    - state: job_icon_bottom
+      color: *color-security-bottom # aavikko icons resprite
+    - sprite: *icon-rsi
+      offset: *icon-offset
+      state: Pilot
+  - type: PresetIdCard
+    job: Pilot
