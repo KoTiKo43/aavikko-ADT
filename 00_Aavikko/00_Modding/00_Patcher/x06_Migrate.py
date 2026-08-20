@@ -53,8 +53,8 @@ _SCRIPT_PATH = Path(__file__).resolve()
 _BUILD_ROOT = _SCRIPT_PATH.parent.parent.parent  # Corvax_Clean/
 _BUILDS_ROOT = _BUILD_ROOT.parent                 # contains Corvax_Clean/, Aavikko-2.0/, etc.
 
-DEFAULT_AAVIKKO_SRC = str(_BUILDS_ROOT / "Aavikko-2.0" / "Resources")
-DEFAULT_CORVAX_DST = str(_BUILD_ROOT)
+DEFAULT_AAVIKKO_SRC = str(_BUILDS_ROOT / "Aavikko-Avaruus-ADT" / "Resources")
+DEFAULT_CORVAX_DST = str(_BUILD_ROOT)  # Aavikko-Avaruus-ADT-overlay (has upstream ADT Resources/)
 
 TEXTUAL_EXT = {".yml", ".yaml", ".ftl", ".json", ".xml", ".txt", ".csv", ".toml", ".ini", ".lua", ".js", ".ts", ".cs"}
 ID_RE = re.compile(r"""^\s*-?\s*id:\s*['"]?([^'"\s#]+)""", re.MULTILINE)
