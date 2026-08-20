@@ -17,8 +17,8 @@ Also cleans up:
   - Temp snapshot files (.old.patched, .conflict.upstream, .conflict.patched)
 
 Usage:
-  python3 Clear.py             # Full revert
-  python3 Clear.py --dry-run   # Show what would be reverted
+  python3 x02_Clear.py             # Full revert
+  python3 x02_x02_Clear.py --dry-run   # Show what would be reverted
 """
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ import time
 from pathlib import Path
 
 # Shared utilities (single source of truth for run/atomic_write/safe_resolve)
-from common import (
+from l00_common import (
     SCRIPT_DIR, BUILD_ROOT, APPLIED_FILE, LOCK_FILE,
     STATE_FILE, DECISIONS_FILE,
     force_utf8_stdio, run, run_git_with_lock_retry,
@@ -61,23 +61,23 @@ def run(cmd, cwd: Path | None = None) -> tuple[str, str, int]:
     """Run a command (delegates to common.run for cross-platform compat).
 
     Kept here as a thin wrapper so existing imports `from Clear import run`
-    still work — but all scripts should prefer `from common import run`.
+    still work — but all scripts should prefer `from l00_common import run`.
     """
-    from common import run as _run
+    from l00_common import run as _run
     return _run(cmd, cwd=cwd)
 
 
 def run_git_with_lock_retry(cmd, cwd: Path | None = None,
                             max_retries: int = 5, retry_delay: float = 1.0) -> tuple[str, str, int]:
     """Delegate to common.run_git_with_lock_retry (kept for backward compat)."""
-    from common import run_git_with_lock_retry as _rg
+    from l00_common import run_git_with_lock_retry as _rg
     return _rg(cmd, cwd=cwd, max_retries=max_retries, retry_delay=retry_delay)
 
 
 def sync_content_mods_back():
-    """Sync Content.*/Aavikko/ → Aavikko.Content/Mods/ before reverting.
+    """Sync Content.*/Aavikko/ → 00_Aavikko/02_Content/Mods/ before reverting.
 
-    Apply.py copies Aavikko.Content/Mods/*.cs → Content.*/Aavikko/.
+    Apply.py copies 00_Aavikko/02_Content/Mods/*.cs → Content.*/Aavikko/.
     Developer may edit these files in-place (in Content.*/Aavikko/).
     Before Clear reverts upstream (git clean -fd removes them), we sync
     changes back to the overlay so nothing is lost.
@@ -87,7 +87,7 @@ def sync_content_mods_back():
     copied back.
     """
     import shutil
-    content_mods_dir = BUILD_ROOT / "Aavikko.Content" / "Mods"
+    content_mods_dir = BUILD_ROOT / "00_Aavikko/02_Content" / "Mods"
     if not content_mods_dir.exists():
         return 0
 
@@ -106,7 +106,7 @@ def sync_content_mods_back():
                 continue
             if src.is_symlink():
                 continue
-            # Mirror path: Content.Server/Aavikko/Foo.cs → Aavikko.Content/Mods/Content.Server/Aavikko/Foo.cs
+            # Mirror path: Content.Server/Aavikko/Foo.cs → 00_Aavikko/02_Content/Mods/Content.Server/Aavikko/Foo.cs
             rel = src.relative_to(BUILD_ROOT)
             dst = content_mods_dir / rel
             dst.parent.mkdir(parents=True, exist_ok=True)
@@ -168,11 +168,11 @@ def revert_robusttoolbox() -> bool:
 def cleanup_temp_snapshots():
     """Remove temp snapshot files created by Check.py.
     These are: .old.patched, .conflict.upstream, .conflict.patched
-    Found in Aavikko.Resources/Patches/ and Aavikko.Content/Patches/"""
+    Found in 00_Aavikko/01_Resources/Patches/ and 00_Aavikko/02_Content/Patches/"""
     cleaned = 0
     for patches_dir in [
-        BUILD_ROOT / "Aavikko.Resources" / "Patches",
-        BUILD_ROOT / "Aavikko.Content" / "Patches",
+        BUILD_ROOT / "00_Aavikko/01_Resources" / "Patches",
+        BUILD_ROOT / "00_Aavikko/02_Content" / "Patches",
     ]:
         if not patches_dir.exists():
             continue
@@ -208,7 +208,7 @@ def main():
     # in that case there are no symlinks to remove, and the slow rglob fallback
     # would walk 5000+ files for nothing. On HDD this saves 30-50s per Clear.
     try:
-        import SymLinks
+        import l02_symlinks as SymLinks
         print("\n--- Removing all symlinks (@Mods/@Patches/@Path/@patched) ---", flush=True)
         if not SymLinks.symlinks_likely_exist():
             # Neither .applied nor .symlinks.json → pristine state, no symlinks exist
@@ -277,13 +277,13 @@ def main():
     print("  [OK] Resources/ reverted to HEAD")
 
     # 2. Sync Content Mods back (before reverting Content.*!)
-    #    Apply.py copies Aavikko.Content/Mods/*.cs → Content.*/Aavikko/
+    #    Apply.py copies 00_Aavikko/02_Content/Mods/*.cs → Content.*/Aavikko/
     #    Dev may have edited them in Content.*/Aavikko/ — sync back so nothing is lost
     print(f"\n--- [2/5] Sync Content Mods back ---")
     with step_timer("Sync Content Mods back"):
         synced = sync_content_mods_back()
     if synced > 0:
-        print(f"  [OK] Synced {synced} file(s) back to Aavikko.Content/Mods/")
+        print(f"  [OK] Synced {synced} file(s) back to 00_Aavikko/02_Content/Mods/")
     else:
         print(f"  [OK] No changes to sync back")
 

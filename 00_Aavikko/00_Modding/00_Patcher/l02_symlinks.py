@@ -9,7 +9,7 @@ Two types of symlinks:
 
 2. **@Path** — pointer from overlay folder to the corresponding folder in
    the build tree (Resources/, Content.*/, RobustToolbox/).
-   Click @Path in Aavikko.Resources/Mods/Audio/ → jump to Resources/Audio/.
+   Click @Path in 00_Aavikko/01_Resources/Mods/Audio/ → jump to Resources/Audio/.
    Shows what's currently in the build (Aavikko files after Apply, upstream
    files after Clear).
 
@@ -19,7 +19,7 @@ Two types of symlinks:
 
 Layout (after `python3 SymLinks.py create`):
 
-  Aavikko.Resources/
+  00_Aavikko/01_Resources/
   ├── Mods/
   │   ├── Audio/
   │   │   ├── @Patches/  ← symlink → ../../Patches/Audio/
@@ -31,7 +31,7 @@ Layout (after `python3 SymLinks.py create`):
   │   │   └── @Path/     ← symlink → ../../../Resources/Audio/
   │   └── ...
 
-  Aavikko.Content/
+  00_Aavikko/02_Content/
   ├── Patches/
   │   └── Content.Server/
   │       └── Foo/
@@ -72,7 +72,7 @@ if hasattr(sys.stdout, 'reconfigure'):
         pass
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-BUILD_ROOT = SCRIPT_DIR.parent.parent
+BUILD_ROOT = SCRIPT_DIR.parent.parent.parent
 
 # State file: tracks every symlink we create, so removal is O(N) unlink calls
 # instead of O(filesystem tree) rglob walks. On HDD with 5000+ overlay files,
@@ -86,9 +86,9 @@ SYMLINK_STATE_FILE = SCRIPT_DIR / ".symlinks.json"
 #   - label: display name
 #   - build_target_dir: where in the build tree these files end up after Apply
 OVERLAY_PAIRS = [
-    (BUILD_ROOT / "Aavikko.Resources", "Resources", BUILD_ROOT / "Resources"),
-    (BUILD_ROOT / "Aavikko.Content", "Content", BUILD_ROOT),  # Content.* paths already include project name
-    (BUILD_ROOT / "Aavikko.RobustToolbox", "RobustToolbox", BUILD_ROOT / "RobustToolbox"),
+    (BUILD_ROOT / "00_Aavikko/01_Resources", "Resources", BUILD_ROOT / "Resources"),
+    (BUILD_ROOT / "00_Aavikko/02_Content", "Content", BUILD_ROOT),  # Content.* paths already include project name
+    (BUILD_ROOT / "00_Aavikko/03_RobustToolbox", "RobustToolbox", BUILD_ROOT / "RobustToolbox"),
 ]
 
 # Names of the navigation folders (sorted to top via @ prefix)
@@ -405,8 +405,8 @@ def create_path_links_for_overlay(overlay_root: Path, label: str,
     (not just subdirectories). Empty folders are skipped.
 
     Example:
-      Aavikko.Resources/Patches/@Path → ../../Resources/  (has clientCommandPerms.yml)
-      Aavikko.Resources/Mods/Audio/@Path → ../../../Resources/Audio/  (has .ogg files)
+      00_Aavikko/01_Resources/Patches/@Path → ../../Resources/  (has clientCommandPerms.yml)
+      00_Aavikko/01_Resources/Mods/Audio/@Path → ../../../Resources/Audio/  (has .ogg files)
     """
     symlinks_created = 0
     fallbacks_created = 0

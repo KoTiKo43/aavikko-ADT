@@ -39,7 +39,7 @@ import urllib.request
 
 # Make sibling ui.py importable when run from any working directory
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from ui import (
+from l01_ui import (
     header, section, kv, ok, info, warn, error, hint, tag,
     summary_table, success_banner, dim, bold,
     green, yellow, red, cyan,
@@ -49,12 +49,12 @@ API = os.environ.get("SANDBOX_API", "http://scaledteam.ru:51335")
 TOKEN = os.environ.get("SANDBOX_TOKEN", "")
 BUILD = os.environ.get("SANDBOX_BUILD", "Corvax_Clean")
 # Path inside container — relative to script location
-# Script lives at: <build_root>/Aavikko.Modding/Patcher/deploy_full.py
+# Script lives at: <build_root>/00_Aavikko/00_Modding/Patcher/deploy_full.py
 # That's 3 levels deep: parent³ = build_root
 _SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))  # .../Patcher/
 _BUILD_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(_SCRIPT_PATH)))  # .../Corvax_Clean/
 BUILD_DIR = os.environ.get("BUILD_DIR", _BUILD_ROOT)
-PATCHER_DIR = f"{BUILD_DIR}/Aavikko.Modding/Patcher"
+PATCHER_DIR = f"{BUILD_DIR}/00_Aavikko/00_Modding/Patcher"
 
 
 def api_call(method: str, path: str, params: dict | None = None,
@@ -220,7 +220,7 @@ def main():
     # ── Step 1: Clear ──
     if not args.skip_clear:
         section(1, 7, "Clear (revert upstream)")
-        r = run_in_container(f"cd {PATCHER_DIR} && python3 Clear.py", timeout=60)
+        r = run_in_container(f"cd {PATCHER_DIR} && python3 x02_Clear.py", timeout=60)
         tag("exit_code", r.get('exit_code'), indent=2, color=cyan)
         _print_container_output(r, tail_lines=5)
         if r.get("exit_code", -1) != 0:
@@ -233,7 +233,7 @@ def main():
     # ── Step 2: Migrate ──
     if not args.skip_migrate:
         section(2, 7, "Migrate (generate Mods/Patches + copy migrations)")
-        r = run_in_container(f"cd {PATCHER_DIR} && python3 Migrate.py --clean", timeout=120)
+        r = run_in_container(f"cd {PATCHER_DIR} && python3 x06_Migrate.py --clean", timeout=120)
         tag("exit_code", r.get('exit_code'), indent=2, color=cyan)
         _print_container_output(r, tail_lines=10)
         if r.get("exit_code", -1) != 0:
@@ -258,13 +258,13 @@ def main():
         ok("All patches valid")
 
         section(4, 7, "Apply (overlay to Resources/ + Content.*)")
-        r = run_in_container(f"cd {PATCHER_DIR} && python3 Apply.py", timeout=120)
+        r = run_in_container(f"cd {PATCHER_DIR} && python3 x00_Apply.py", timeout=120)
         tag("exit_code", r.get('exit_code'), indent=2, color=cyan)
         _print_container_output(r, tail_lines=8)
         if r.get("exit_code", -1) != 0:
             error("Apply.py failed")
             hint("Likely cause: a patch failed to apply. Check stderr above.")
-            hint("Fix: regenerate the failing patch with Generate.py --restore")
+            hint("Fix: regenerate the failing patch with x01_Generate.py --restore")
             sys.exit(1)
     else:
         section(4, 7, "Apply (SKIPPED)")
@@ -291,7 +291,7 @@ def main():
         print()
         info("Re-restoring DB migrations...")
         r = run_in_container(
-            f"cd {PATCHER_DIR} && python3 Migrate.py --only-migrations",
+            f"cd {PATCHER_DIR} && python3 x06_Migrate.py --only-migrations",
             timeout=60
         )
         if r.get("stdout"):

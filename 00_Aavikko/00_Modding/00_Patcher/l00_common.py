@@ -31,17 +31,17 @@ from pathlib import Path
 
 # ── Module-level paths (every script shares these) ────────────────────────
 SCRIPT_DIR = Path(__file__).resolve().parent
-BUILD_ROOT = SCRIPT_DIR.parent.parent  # Patcher/ → Aavikko.Modding/ → build_root/
+BUILD_ROOT = SCRIPT_DIR.parent.parent.parent  # 00_Patcher/ → 00_Aavikko/00_Modding/ → build_root/
 
-RESOURCES_DIR = BUILD_ROOT / "Aavikko.Resources"
+RESOURCES_DIR = BUILD_ROOT / "00_Aavikko/01_Resources"
 MODS_DIR = RESOURCES_DIR / "Mods"
 PATCHES_DIR = RESOURCES_DIR / "Patches"
 MANIFEST = RESOURCES_DIR / "manifest.yml"
-CONTENT_DIR = BUILD_ROOT / "Aavikko.Content"
+CONTENT_DIR = BUILD_ROOT / "00_Aavikko/02_Content"
 CS_MODS_DIR = CONTENT_DIR / "Mods"
 CS_PATCHES_DIR = CONTENT_DIR / "Patches"
 ROBUST_DIR = BUILD_ROOT / "RobustToolbox"
-ROBUST_OVERLAY_DIR = BUILD_ROOT / "Aavikko.RobustToolbox"
+ROBUST_OVERLAY_DIR = BUILD_ROOT / "00_Aavikko/03_RobustToolbox"
 ROBUST_MODS_DIR = ROBUST_OVERLAY_DIR / "Mods"
 ROBUST_PATCHES_DIR = ROBUST_OVERLAY_DIR / "Patches"
 

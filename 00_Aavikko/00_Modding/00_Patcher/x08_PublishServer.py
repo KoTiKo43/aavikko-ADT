@@ -54,14 +54,14 @@ from pathlib import Path
 
 # Make sibling ui.py importable
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from ui import (
+from l01_ui import (
     header, section, kv, ok, info, warn, error, hint, tag,
     success_banner, fail_banner, dim, bold,
     green, yellow, red, cyan,
 )
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-BUILD_ROOT = SCRIPT_DIR.parent.parent
+BUILD_ROOT = SCRIPT_DIR.parent.parent.parent
 PACKAGING_PROJECT = BUILD_ROOT / "Content.Packaging" / "Content.Packaging.csproj"
 RELEASE_DIR = BUILD_ROOT / "release"
 APPLIED_FILE = SCRIPT_DIR / ".applied"

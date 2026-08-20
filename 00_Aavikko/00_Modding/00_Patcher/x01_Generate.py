@@ -5,27 +5,27 @@ Generate.py — capture git diff from upstream .cs file, save as .cs.patch.
 Workflow:
   1. Developer edits an upstream .cs file (e.g. Content.Shared/Botany/Systems/PlantSystem.cs)
      in IDE — normal editing, IDE sees real project, type checking works.
-  2. Developer runs: python3 Generate.py Content.Shared/Botany/Systems/PlantSystem.cs
+  2. Developer runs: python3 x01_Generate.py Content.Shared/Botany/Systems/PlantSystem.cs
   3. Generate.py:
      a. Verifies the file exists and is tracked by git
      b. Runs `git diff <file>` to capture changes
      c. If diff is empty: "No changes to capture" → exit
-     d. Saves diff to Aavikko.Content/Patches/<mirror_path>.cs.patch
+     d. Saves diff to 00_Aavikko/02_Content/Patches/<mirror_path>.cs.patch
      e. Optionally runs `git checkout -- <file>` to restore upstream (with --restore flag)
      f. Prints summary
 
 Usage:
-  python3 Generate.py <path/to/file.cs>
-  python3 Generate.py <path/to/file.cs> --restore   # restore upstream after capturing
-  python3 Generate.py --all                          # capture all modified .cs files
-  python3 Generate.py --list                         # list modified .cs files
+  python3 x01_Generate.py <path/to/file.cs>
+  python3 x01_Generate.py <path/to/file.cs> --restore   # restore upstream after capturing
+  python3 x01_x01_Generate.py --all                          # capture all modified .cs files
+  python3 x01_x01_Generate.py --list                         # list modified .cs files
 
 The .patch file mirrors the upstream path:
   Upstream:   Content.Shared/Botany/Systems/PlantSystem.cs
-  Patch:      Aavikko.Content/Patches/Content.Shared/Botany/Systems/PlantSystem.cs.patch
+  Patch:      00_Aavikko/02_Content/Patches/Content.Shared/Botany/Systems/PlantSystem.cs.patch
 
 For .csproj patches (999-csproj-include-aavikko.cs.patch), use --csproj flag:
-  python3 Generate.py Content.Server/Content.Server.csproj --csproj
+  python3 x01_Generate.py Content.Server/Content.Server.csproj --csproj
 """
 from __future__ import annotations
 
@@ -44,7 +44,7 @@ if hasattr(sys.stdout, 'reconfigure'):
     except (OSError, ValueError):
         pass
 
-from ui import (
+from l01_ui import (
     header, section, divider, kv, ok, info, warn, error, fatal,
     skip, hint, tag, bullet, progress_iter, summary_table,
     success_banner, fail_banner, dim, bold,
@@ -53,14 +53,14 @@ from ui import (
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-BUILD_ROOT = SCRIPT_DIR.parent.parent
-PATCHES_DIR = BUILD_ROOT / "Aavikko.Content" / "Patches"
-ROBUST_PATCHES_DIR = BUILD_ROOT / "Aavikko.RobustToolbox" / "Patches"
+BUILD_ROOT = SCRIPT_DIR.parent.parent.parent
+PATCHES_DIR = BUILD_ROOT / "00_Aavikko/02_Content" / "Patches"
+ROBUST_PATCHES_DIR = BUILD_ROOT / "00_Aavikko/03_RobustToolbox" / "Patches"
 ROBUST_DIR = BUILD_ROOT / "RobustToolbox"
 
 # Resources/ overlay: files are COPIED directly (no .patch diff generation)
 # Apply.py copy_tree() handles them: Patches/ → overwrite upstream, Mods/ → new file.
-RESOURCES_OVERLAY_DIR = BUILD_ROOT / "Aavikko.Resources"
+RESOURCES_OVERLAY_DIR = BUILD_ROOT / "00_Aavikko/01_Resources"
 RESOURCES_PATCHES_DIR = RESOURCES_OVERLAY_DIR / "Patches"
 RESOURCES_MODS_DIR = RESOURCES_OVERLAY_DIR / "Mods"
 
@@ -68,9 +68,9 @@ RESOURCES_MODS_DIR = RESOURCES_OVERLAY_DIR / "Mods"
 # ── Path-type detection ────────────────────────────────────────────────────
 # Determine which overlay a file belongs to based on its path prefix.
 # Used to auto-route Generate.py to the correct workflow:
-#   - Resources/  → copy file to Aavikko.Resources/Patches/ or Mods/ (no diff)
-#   - RobustToolbox/ (or Robust.*) → .cs.patch in Aavikko.RobustToolbox/Patches/
-#   - Content.*   → .cs.patch in Aavikko.Content/Patches/
+#   - Resources/  → copy file to 00_Aavikko/01_Resources/Patches/ or Mods/ (no diff)
+#   - RobustToolbox/ (or Robust.*) → .cs.patch in 00_Aavikko/03_RobustToolbox/Patches/
+#   - Content.*   → .cs.patch in 00_Aavikko/02_Content/Patches/
 
 
 def detect_path_type(filepath: str) -> str:
@@ -197,15 +197,15 @@ def get_patch_dest(filepath: str, is_csproj: bool = False, is_robust: bool = Fal
 
     For regular .cs files (Content.*): mirror upstream path
       Content.Shared/Botany/Systems/PlantSystem.cs
-      → Aavikko.Content/Patches/Content.Shared/Botany/Systems/PlantSystem.cs.patch
+      → 00_Aavikko/02_Content/Patches/Content.Shared/Botany/Systems/PlantSystem.cs.patch
 
-    For RobustToolbox .cs files: mirror path under Aavikko.RobustToolbox/Patches/
+    For RobustToolbox .cs files: mirror path under 00_Aavikko/03_RobustToolbox/Patches/
       Robust.Shared/ProgramShared.cs
-      → Aavikko.RobustToolbox/Patches/Robust.Shared/ProgramShared.cs.patch
+      → 00_Aavikko/03_RobustToolbox/Patches/Robust.Shared/ProgramShared.cs.patch
 
     For .csproj files: use 999-csproj-include-aavikko.cs.patch name
       Content.Server/Content.Server.csproj
-      → Aavikko.Content/Patches/Content.Server/999-csproj-include-aavikko.cs.patch
+      → 00_Aavikko/02_Content/Patches/Content.Server/999-csproj-include-aavikko.cs.patch
     """
     p = Path(filepath)
     base_dir = ROBUST_PATCHES_DIR if is_robust else PATCHES_DIR
@@ -229,9 +229,9 @@ def get_resources_dest(filepath: str) -> tuple[Path, str]:
       (dest_path, location) where location is 'Patches' or 'Mods'
 
     - Tracked by git (existing upstream file modified):
-        Resources/Audio/foo.ogg → Aavikko.Resources/Patches/Audio/foo.ogg
+        Resources/Audio/foo.ogg → 00_Aavikko/01_Resources/Patches/Audio/foo.ogg
     - NOT tracked (new Aavikko file):
-        Resources/Audio/foo.ogg → Aavikko.Resources/Mods/Audio/foo.ogg
+        Resources/Audio/foo.ogg → 00_Aavikko/01_Resources/Mods/Audio/foo.ogg
     """
     # Strip "Resources/" prefix for mirror path
     norm = filepath.replace("\\", "/")
@@ -251,7 +251,7 @@ def get_resources_dest(filepath: str) -> tuple[Path, str]:
 
 
 def capture_resources_file(filepath: str, restore: bool = False) -> bool:
-    """For Resources/ files: copy file to Aavikko.Resources overlay (no diff).
+    """For Resources/ files: copy file to 00_Aavikko/01_Resources overlay (no diff).
 
     Resources files (YAML, audio, textures, etc.) don't need git-diff patch
     generation. Apply.py copies them directly via copy_tree():
@@ -260,7 +260,7 @@ def capture_resources_file(filepath: str, restore: bool = False) -> bool:
 
     Workflow:
       1. Detect if file is tracked by git (existing) or new
-      2. Copy file to Aavikko.Resources/Patches/<mirror> or Mods/<mirror>
+      2. Copy file to 00_Aavikko/01_Resources/Patches/<mirror> or Mods/<mirror>
       3. With --restore: revert upstream file (git checkout if tracked,
          delete if new) after copy
 
@@ -332,7 +332,7 @@ def capture_patch(filepath: str, restore: bool = False, is_csproj: bool = False,
     so the developer can inspect/debug. Use --keep-broken to save with normal name.
 
     Set is_robust=True for RobustToolbox files (paths start with Robust.*)
-    — patch is saved to Aavikko.RobustToolbox/Patches/ and git apply runs
+    — patch is saved to 00_Aavikko/03_RobustToolbox/Patches/ and git apply runs
     with cwd=RobustToolbox/.
     """
     # Determine working directory and full path
@@ -350,7 +350,7 @@ def capture_patch(filepath: str, restore: bool = False, is_csproj: bool = False,
     if rc != 0:
         error(f"File is not tracked by git: {filepath}")
         hint("Generate.py only works on upstream files (tracked by git).")
-        hint("For new Aavikko files, place them directly in Aavikko.Content/Mods/ or Aavikko.RobustToolbox/Mods/.")
+        hint("For new Aavikko files, place them directly in 00_Aavikko/02_Content/Mods/ or 00_Aavikko/03_RobustToolbox/Mods/.")
         return False
 
     # Get diff (must use cwd-specific git, preserve raw output)
@@ -454,9 +454,9 @@ def list_modified_all() -> list[str]:
     """List all modified files (not just .cs) — includes Resources/, Content.*, RobustToolbox/.
 
     Used by --all flag to capture everything modified since last commit:
-      - Resources/ files → copied to Aavikko.Resources/Patches/ or Mods/
-      - Content.* .cs/.xaml files → .cs.patch in Aavikko.Content/Patches/
-      - RobustToolbox files → .cs.patch in Aavikko.RobustToolbox/Patches/
+      - Resources/ files → copied to 00_Aavikko/01_Resources/Patches/ or Mods/
+      - Content.* .cs/.xaml files → .cs.patch in 00_Aavikko/02_Content/Patches/
+      - RobustToolbox files → .cs.patch in 00_Aavikko/03_RobustToolbox/Patches/
 
     Skips:
       - Aavikko.* paths (they ARE the overlay)
@@ -481,7 +481,7 @@ def list_modified_all() -> list[str]:
         if path.startswith("Aavikko."):
             continue
         # Skip Patcher/ scripts and state files
-        if path.startswith("Aavikko.Modding/Patcher/"):
+        if path.startswith("00_Aavikko/00_Modding/Patcher/"):
             continue
         # Skip .csproj (handled separately via --csproj flag)
         if path.endswith(".csproj"):
@@ -512,9 +512,9 @@ def list_modified_all() -> list[str]:
 def main():
     parser = argparse.ArgumentParser(
         description="Generate overlay files from upstream changes.\n"
-                   "  - Resources/ files: copied to Aavikko.Resources/Patches/ (tracked) or Mods/ (new)\n"
-                   "  - Content.* .cs/.xaml files: .cs.patch in Aavikko.Content/Patches/\n"
-                   "  - RobustToolbox files: .cs.patch in Aavikko.RobustToolbox/Patches/\n"
+                   "  - Resources/ files: copied to 00_Aavikko/01_Resources/Patches/ (tracked) or Mods/ (new)\n"
+                   "  - Content.* .cs/.xaml files: .cs.patch in 00_Aavikko/02_Content/Patches/\n"
+                   "  - RobustToolbox files: .cs.patch in 00_Aavikko/03_RobustToolbox/Patches/\n"
                    "Path type is auto-detected from the filepath prefix.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -558,8 +558,8 @@ def main():
                 if len(files) > 20:
                     print(f"    ... and {len(files) - 20} more")
             print()
-            hint(f"Run: python3 Generate.py --all")
-            hint(f"Or capture one: python3 Generate.py <path>")
+            hint(f"Run: python3 x01_x01_Generate.py --all")
+            hint(f"Or capture one: python3 x01_Generate.py <path>")
         return
     
     if args.all:

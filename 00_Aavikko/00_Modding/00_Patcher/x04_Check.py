@@ -14,19 +14,19 @@ B. Mods/ conflict — upstream added file at same path as our Mods/ file:
    - Content/Mods/<path>    → upstream now has Content.<path>
 
 State tracking:
-  Aavikko.Modding/.upstream_state.json — records upstream commit + sha256 of
+  00_Aavikko/00_Modding/.upstream_state.json — records upstream commit + sha256 of
   each upstream file that corresponds to our Patches/ and Mods/ entries.
   First run: records baseline (no conflicts).
   Subsequent runs: compares current upstream sha256 with recorded.
 
 Decisions:
-  Aavikko.Modding/.conflict_decisions.yml — developer's decisions persist.
+  00_Aavikko/00_Modding/.conflict_decisions.yml — developer's decisions persist.
   Apply.py reads this file and refuses to run if unresolved conflicts exist.
 
 Usage:
-  python3 Check.py                    # interactive — ask developer for each conflict
-  python3 Check.py --non-interactive  # CI mode — default 'ignore' for all, just report
-  python3 Check.py --baseline         # force re-record baseline (forget all conflicts)
+  python3 x04_Check.py                    # interactive — ask developer for each conflict
+  python3 x04_x04_Check.py --non-interactive  # CI mode — default 'ignore' for all, just report
+  python3 x04_x04_Check.py --baseline         # force re-record baseline (forget all conflicts)
 """
 from __future__ import annotations
 
@@ -55,14 +55,14 @@ if hasattr(sys.stdout, 'reconfigure'):
 # We import lazily (only the helpers we use) to avoid pulling in
 # RESOURCES_DIR / BUILD_ROOT constants that already exist locally above.
 try:
-    from common import atomic_write_text as _atomic_write_text_impl
+    from l00_common import atomic_write_text as _atomic_write_text_impl
 except ImportError:
     _atomic_write_text_impl = None  # fall back to local copy below
 
 # Validate git commit hashes (hex, 7-40 chars)
 COMMIT_RE = re.compile(r'^[0-9a-f]{7,40}$')
 
-from ui import (
+from l01_ui import (
     header, section, divider, kv, ok, info, warn, error, fatal,
     skip, hint, tag, bullet, progress_iter, summary_table,
     success_banner, fail_banner, dim, bold,
@@ -70,9 +70,9 @@ from ui import (
 )
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-BUILD_ROOT = SCRIPT_DIR.parent.parent
-RESOURCES_DIR = BUILD_ROOT / "Aavikko.Resources"
-CONTENT_DIR = BUILD_ROOT / "Aavikko.Content"
+BUILD_ROOT = SCRIPT_DIR.parent.parent.parent
+RESOURCES_DIR = BUILD_ROOT / "00_Aavikko/01_Resources"
+CONTENT_DIR = BUILD_ROOT / "00_Aavikko/02_Content"
 STATE_FILE = SCRIPT_DIR / ".upstream_state.json"
 DECISIONS_FILE = SCRIPT_DIR / ".conflict_decisions.yml"
 
@@ -366,10 +366,10 @@ def collect_current_state() -> dict:
     If old_state uses SHA256 and new_state uses SHA1, we re-baseline.
 
     Scans:
-      - Aavikko.Resources/Patches/ — for each file, get hash of upstream Resources/<path>
-      - Aavikko.Resources/Mods/    — for each file, check if upstream now has same path
-      - Aavikko.Content/Patches/   — for each .cs.patch/.xaml.patch, get hash of upstream Content.<path>
-      - Aavikko.Content/Mods/      — for each file, check if upstream now has same path
+      - 00_Aavikko/01_Resources/Patches/ — for each file, get hash of upstream Resources/<path>
+      - 00_Aavikko/01_Resources/Mods/    — for each file, check if upstream now has same path
+      - 00_Aavikko/02_Content/Patches/   — for each .cs.patch/.xaml.patch, get hash of upstream Content.<path>
+      - 00_Aavikko/02_Content/Mods/      — for each file, check if upstream now has same path
     """
     state = {
         "recorded_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
@@ -639,10 +639,10 @@ def create_temp_snapshots(conflict: dict) -> None:
     """Create temp snapshot files for a Patches/ conflict.
 
     For Resources/Patches/<path>:
-      Creates in Aavikko.Resources/Patches/<path>.{old.patched,conflict.upstream,conflict.patched}
+      Creates in 00_Aavikko/01_Resources/Patches/<path>.{old.patched,conflict.upstream,conflict.patched}
 
     For Content/Patches/<path>.cs.patch:
-      Creates in Aavikko.Content/Patches/<path>.{old.patched,conflict.upstream,conflict.patched}
+      Creates in 00_Aavikko/02_Content/Patches/<path>.{old.patched,conflict.upstream,conflict.patched}
     """
     path = conflict["path"]  # e.g. "Content.Shared/Botany/Systems/PlantSystem.cs"
 

@@ -1,0 +1,159 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "aavikko: apply",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "${workspaceFolder}/Aavikko.Modding/Patcher/Apply.py"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "aavikko: clear",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "${workspaceFolder}/Aavikko.Modding/Patcher/Clear.py"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "aavikko: migrate",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "${workspaceFolder}/Aavikko.Modding/Patcher/Migrate.py",
+        "--clean"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "aavikko: validate",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "${workspaceFolder}/Aavikko.Modding/Patcher/Validate.py"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "aavikko: check",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "${workspaceFolder}/Aavikko.Modding/Patcher/Check.py"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "aavikko: status",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "${workspaceFolder}/Aavikko.Modding/Patcher/Status.py"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "aavikko: build server",
+      "type": "shell",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "Content.Server",
+        "--no-restore"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "aavikko: build client",
+      "type": "shell",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "Content.Client",
+        "--no-restore"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "aavikko: apply + build server",
+      "dependsOn": [
+        "aavikko: apply",
+        "aavikko: build server"
+      ],
+      "dependsOrder": "sequence",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "aavikko: apply + build client",
+      "dependsOn": [
+        "aavikko: apply",
+        "aavikko: build client"
+      ],
+      "dependsOrder": "sequence",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "aavikko: clear + migrate + apply + build server",
+      "dependsOn": [
+        "aavikko: clear",
+        "aavikko: migrate",
+        "aavikko: apply",
+        "aavikko: build server"
+      ],
+      "dependsOrder": "sequence",
+      "group": "build",
+      "problemMatcher": []
+    }
+  ]
+}

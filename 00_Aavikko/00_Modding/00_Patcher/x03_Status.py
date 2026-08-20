@@ -4,7 +4,7 @@
 Single authoritative entry point for "what is the current state of the overlay?".
 Instead of re-implementing overlay/git logic in JavaScript, the extension calls:
 
-    python3 Status.py --json
+    python3 x03_Status.py --json
 
 and gets one JSON document with everything it needs:
 
@@ -49,7 +49,7 @@ if hasattr(sys.stdout, 'reconfigure'):
         pass
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-BUILD_ROOT = SCRIPT_DIR.parent.parent
+BUILD_ROOT = SCRIPT_DIR.parent.parent.parent
 ROBUST_DIR = BUILD_ROOT / "RobustToolbox"
 APPLIED_FILE = SCRIPT_DIR / ".applied"
 
@@ -148,17 +148,17 @@ def has_overlay(rel_path: str) -> bool:
     if rel_path.startswith("Resources/"):
         mirror = rel_path[len("Resources/"):]
         return (
-            (BUILD_ROOT / "Aavikko.Resources" / "Patches" / mirror).exists()
-            or (BUILD_ROOT / "Aavikko.Resources" / "Mods" / mirror).exists()
+            (BUILD_ROOT / "00_Aavikko/01_Resources" / "Patches" / mirror).exists()
+            or (BUILD_ROOT / "00_Aavikko/01_Resources" / "Mods" / mirror).exists()
         )
     if rel_path.startswith("RobustToolbox/"):
         inner = rel_path[len("RobustToolbox/"):]
-        base = BUILD_ROOT / "Aavikko.RobustToolbox"
+        base = BUILD_ROOT / "00_Aavikko/03_RobustToolbox"
         return (
             (base / "Patches" / f"{inner}.patch").exists()
             or (base / "Mods" / inner).exists()
         )
-    base = BUILD_ROOT / "Aavikko.Content"
+    base = BUILD_ROOT / "00_Aavikko/02_Content"
     return (
         (base / "Patches" / f"{rel_path}.patch").exists()
         or (base / "Mods" / rel_path).exists()
@@ -187,17 +187,17 @@ def collect_overlay() -> dict:
     """Inventory of all overlay files, grouped by root."""
     return {
         "content_patches": scan_overlay_dir(
-            BUILD_ROOT / "Aavikko.Content" / "Patches", (".patch",)),
+            BUILD_ROOT / "00_Aavikko/02_Content" / "Patches", (".patch",)),
         "content_mods": scan_overlay_dir(
-            BUILD_ROOT / "Aavikko.Content" / "Mods", (".cs", ".xaml")),
+            BUILD_ROOT / "00_Aavikko/02_Content" / "Mods", (".cs", ".xaml")),
         "robust_patches": scan_overlay_dir(
-            BUILD_ROOT / "Aavikko.RobustToolbox" / "Patches", (".patch",)),
+            BUILD_ROOT / "00_Aavikko/03_RobustToolbox" / "Patches", (".patch",)),
         "robust_mods": scan_overlay_dir(
-            BUILD_ROOT / "Aavikko.RobustToolbox" / "Mods", (".cs", ".xaml")),
+            BUILD_ROOT / "00_Aavikko/03_RobustToolbox" / "Mods", (".cs", ".xaml")),
         "resource_patches": scan_overlay_dir(
-            BUILD_ROOT / "Aavikko.Resources" / "Patches", None),
+            BUILD_ROOT / "00_Aavikko/01_Resources" / "Patches", None),
         "resource_mods": scan_overlay_dir(
-            BUILD_ROOT / "Aavikko.Resources" / "Mods", None),
+            BUILD_ROOT / "00_Aavikko/01_Resources" / "Mods", None),
     }
 
 
@@ -308,7 +308,7 @@ def collect_status() -> dict:
 
 def print_human(status: dict) -> None:
     try:
-        from ui import header, kv, ok, warn, info, bold, cyan
+        from l01_ui import header, kv, ok, warn, info, bold, cyan
     except ImportError:
         print(json.dumps(status, indent=2, ensure_ascii=False))
         return
@@ -339,14 +339,14 @@ def print_human(status: dict) -> None:
             print(f"    {tag_mark} {d['path']}")
         if len(dirty) > 15:
             info(f"... and {len(dirty) - 15} more")
-        info("Run: python3 Generate.py --all")
+        info("Run: python3 x01_x01_Generate.py --all")
     else:
         ok("No uncaptured changes.")
 
     n_conf = len(status["conflicts"]["patches"]) + len(status["conflicts"]["mods"])
     print()
     if n_conf:
-        warn(f"{n_conf} unresolved conflict(s) — run: python3 Check.py")
+        warn(f"{n_conf} unresolved conflict(s) — run: python3 x04_Check.py")
     else:
         ok("No conflicts.")
 

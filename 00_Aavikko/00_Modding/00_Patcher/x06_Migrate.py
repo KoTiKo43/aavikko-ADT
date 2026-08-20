@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Migrate.py — generate Aavikko.Resources/Mods + Patches + manifest.yml
-from diff(Aavikko-Avaruus-ADT/Resources, Corvax_Clean/Resources).
+Migrate.py — generate 00_Aavikko/01_Resources/Mods + Patches + manifest.yml
+from diff(Aavikko-2.0/Resources, Corvax_Clean/Resources).
 
-Output structure (in CORVAX_DST/Aavikko.Resources/):
+Output structure (in CORVAX_DST/00_Aavikko/01_Resources/):
   Mods/         — new Aavikko-only files (original paths preserved verbatim)
   Patches/      — modified upstream files (mirror path)
   manifest.yml  — delete + stale lists
@@ -16,7 +16,7 @@ placed at `Resources/<original_path>/` verbatim — no Aavikko/ prepending,
 no path rewriting.
 
 Steps:
-  1. diff -rq Aavikko-Avaruus-ADT/Resources vs Corvax/Resources
+  1. diff -rq Aavikko-2.0/Resources vs Corvax/Resources
   2. Copy new files → Mods/
   3. Copy modified files → Patches/
   4. Deduplicate FTL keys in Mods/Locale/ AND Patches/Locale/
@@ -35,7 +35,7 @@ import sys
 import time
 from pathlib import Path
 
-from ui import (
+from l01_ui import (
     header, section, divider, kv, ok, info, warn, error, fatal,
     skip, hint, tag, bullet, progress_iter, summary_table,
     success_banner, fail_banner, dim, bold,
@@ -43,17 +43,17 @@ from ui import (
 )
 
 # Compute default paths relative to THIS script file.
-# Script lives at: <build_root>/Aavikko.Modding/Patcher/Migrate.py
+# Script lives at: <build_root>/00_Aavikko/00_Modding/Patcher/Migrate.py
 # That's 3 levels deep inside build_root, so:
 #   parent       = .../Patcher/
-#   parent²      = .../Aavikko.Modding/
+#   parent²      = .../00_Aavikko/00_Modding/
 #   parent³      = .../Corvax_Clean/   ← build_root
-#   parent⁴      = .../ss14_builds/    ← builds_root (contains Corvax_Clean/ + Aavikko-Avaruus-ADT/)
+#   parent⁴      = .../ss14_builds/    ← builds_root (contains Corvax_Clean/ + Aavikko-2.0/)
 _SCRIPT_PATH = Path(__file__).resolve()
 _BUILD_ROOT = _SCRIPT_PATH.parent.parent.parent  # Corvax_Clean/
-_BUILDS_ROOT = _BUILD_ROOT.parent                 # contains Corvax_Clean/, Aavikko-Avaruus-ADT/, etc.
+_BUILDS_ROOT = _BUILD_ROOT.parent                 # contains Corvax_Clean/, Aavikko-2.0/, etc.
 
-DEFAULT_AAVIKKO_SRC = str(_BUILDS_ROOT / "Aavikko-Avaruus-ADT" / "Resources")
+DEFAULT_AAVIKKO_SRC = str(_BUILDS_ROOT / "Aavikko-2.0" / "Resources")
 DEFAULT_CORVAX_DST = str(_BUILD_ROOT)
 
 TEXTUAL_EXT = {".yml", ".yaml", ".ftl", ".json", ".xml", ".txt", ".csv", ".toml", ".ini", ".lua", ".js", ".ts", ".cs"}
@@ -405,26 +405,107 @@ def copy_db_migrations(aavikko_src: Path, corvax_dst: Path) -> int:
 CONTENT_DIRS = ["Content.Server", "Content.Client", "Content.Shared",
                 "Content.Server.Database", "Content.Tests", "Content.IntegrationTests"]
 
-# Sandbox-specific files that are managed by deploy_patch, not by Aavikko.Content.
-# These must NOT be migrated to Aavikko.Content/Mods/ — they'd cause duplicate definitions.
+# Sandbox-specific files that are managed by deploy_patch, not by 00_Aavikko/02_Content.
+# These must NOT be migrated to 00_Aavikko/02_Content/Mods/ — they'd cause duplicate definitions.
 SANDBOX_EXCLUDED_PATHS = {
     "AiApi",      # Content.Server/AiApi/ — deployed via sandbox deploy_patch
     "AiVision",   # Content.Client/AiVision/ — deployed via sandbox deploy_patch
 }
 
 
+def generate_csproj_patches(corvax_dst: Path) -> int:
+    """Generate 999-csproj-include-aavikko.cs.patch for each Content.* project
+    that has 00_Aavikko/02_Content/Mods/<project>/Aavikko/ files.
+
+    These patches add <Compile Include="..\\00_Aavikko/02_Content\\Mods\\<project>\\Aavikko\\**\\*.cs" />
+    to each csproj so the SDK-style project picks up Aavikko C# files from the overlay.
+
+    Without these patches, the compiler won't see 00_Aavikko/02_Content/Mods/ files and
+    will fail with CS0234 "type or namespace 'Aavikko' does not exist".
+
+    Returns: number of csproj patches generated.
+    """
+    content_patches_dir = corvax_dst / "00_Aavikko/02_Content" / "Patches"
+    content_mods_dir = corvax_dst / "00_Aavikko/02_Content" / "Mods"
+    generated = 0
+
+    # Standard SS14 Content.* projects that may have Aavikko code
+    projects = ["Content.Shared", "Content.Server", "Content.Client",
+                "Content.Server.Database", "Content.Tests", "Content.IntegrationTests"]
+
+    for proj in projects:
+        aavikko_dir = content_mods_dir / proj / "Aavikko"
+        if not aavikko_dir.exists():
+            continue
+        cs_count = sum(1 for _ in aavikko_dir.rglob("*.cs"))
+        if cs_count == 0:
+            continue
+
+        csproj_path = corvax_dst / proj / f"{proj}.csproj"
+        if not csproj_path.exists():
+            continue
+
+        # Read csproj, check if already has Aavikko reference
+        content = csproj_path.read_text(encoding="utf-8")
+        if "00_Aavikko/02_Content" in content:
+            continue  # Already has reference, skip
+
+        # Insert ItemGroup before </Project>
+        include_path = f"..\\\\00_Aavikko/02_Content\\\\Mods\\\\{proj}\\\\Aavikko\\\\**\\\\*.cs"
+        new_content = content.replace(
+            "</Project>",
+            f"\n  <ItemGroup>\n    <Compile Include=\"{include_path}\" />\n  </ItemGroup>\n</Project>"
+        )
+        csproj_path.write_text(new_content, encoding="utf-8")
+
+        # Capture git diff
+        diff_result = subprocess.run(
+            f"git diff -- {proj}/{proj}.csproj",
+            shell=True, cwd=corvax_dst, capture_output=True,
+            text=True, encoding="utf-8", errors="replace"
+        )
+
+        # Restore csproj
+        run(f"git checkout -- {proj}/{proj}.csproj", cwd=corvax_dst)
+
+        if not diff_result.stdout.strip():
+            continue
+
+        # Save patch
+        patch_dest = content_patches_dir / proj / "999-csproj-include-aavikko.cs.patch"
+        patch_dest.parent.mkdir(parents=True, exist_ok=True)
+        patch_dest.write_text(diff_result.stdout + "\n", encoding="utf-8")
+
+        # Verify patch applies cleanly
+        patch_abs = patch_dest.resolve()
+        _, _, verify_rc = run(
+            f"git apply --check {shlex.quote(str(patch_abs))}",
+            cwd=corvax_dst
+        )
+        if verify_rc == 0:
+            tag("CSPROJ-PATCH", f"{proj}/999-csproj-include-aavikko.cs.patch ({cs_count} .cs files)",
+                indent=4, color=green)
+            generated += 1
+        else:
+            patch_dest.unlink()
+            tag("CSPROJ-FAIL", f"{proj}/999-csproj-include-aavikko.cs.patch — verification failed, deleted",
+                indent=4, color=red)
+
+    return generated
+
+
 def migrate_content(aavikko_build: Path, corvax_dst: Path) -> tuple[int, int]:
-    """Migrate C# modifications from Aavikko-Avaruus-ADT to Aavikko.Content/Patches/ + Mods/.
+    """Migrate C# modifications from Aavikko-2.0 to 00_Aavikko/02_Content/Patches/ + Mods/.
 
     For each Content.* directory:
     - Modified files → generate .cs.patch via git diff (copy Aavikko version,
       capture diff, restore upstream)
-    - New Aavikko-only files → copy to Aavikko.Content/Mods/<mirror_path>
+    - New Aavikko-only files → copy to 00_Aavikko/02_Content/Mods/<mirror_path>
 
     Returns: (patches_generated, mods_copied)
     """
-    content_patches_dir = corvax_dst / "Aavikko.Content" / "Patches"
-    content_mods_dir = corvax_dst / "Aavikko.Content" / "Mods"
+    content_patches_dir = corvax_dst / "00_Aavikko/02_Content" / "Patches"
+    content_mods_dir = corvax_dst / "00_Aavikko/02_Content" / "Mods"
 
     patches_generated = 0
     mods_copied = 0
@@ -446,7 +527,7 @@ def migrate_content(aavikko_build: Path, corvax_dst: Path) -> tuple[int, int]:
                 continue
 
             if line.startswith("Only in") and aavikko_str in line:
-                # New Aavikko-only file → Aavikko.Content/Mods/
+                # New Aavikko-only file → 00_Aavikko/02_Content/Mods/
                 try:
                     left, filename = line.rsplit(": ", 1)
                 except ValueError:
@@ -567,9 +648,9 @@ def main():
     aavikko_src = Path(args.aavikko_src)
     corvax_dst = Path(args.corvax_dst)
     corvax_res = corvax_dst / "Resources"
-    mods_dir = corvax_dst / "Aavikko.Resources" / "Mods"
-    patches_dir = corvax_dst / "Aavikko.Resources" / "Patches"
-    manifest = corvax_dst / "Aavikko.Resources" / "manifest.yml"
+    mods_dir = corvax_dst / "00_Aavikko/01_Resources" / "Mods"
+    patches_dir = corvax_dst / "00_Aavikko/01_Resources" / "Patches"
+    manifest = corvax_dst / "00_Aavikko/01_Resources" / "manifest.yml"
 
     header("Aavikko Resources Migration")
     kv("Source", aavikko_src)
@@ -648,8 +729,8 @@ def main():
         if manifest.exists():
             manifest.unlink()
         # Also wipe Content/Mods and Content/Patches
-        content_mods = corvax_dst / "Aavikko.Content" / "Mods"
-        content_patches = corvax_dst / "Aavikko.Content" / "Patches"
+        content_mods = corvax_dst / "00_Aavikko/02_Content" / "Mods"
+        content_patches = corvax_dst / "00_Aavikko/02_Content" / "Patches"
         if content_mods.exists():
             shutil.rmtree(content_mods)
         if content_patches.exists():
@@ -756,7 +837,7 @@ def main():
     if not args.skip_content:
         section("+", None, "Migrating Content.* (C# code)")
         t = time.time()
-        aavikko_build = aavikko_src.parent  # Aavikko-Avaruus-ADT/ (parent of Resources/)
+        aavikko_build = aavikko_src.parent  # Aavikko-2.0/ (parent of Resources/)
         content_patches, content_mods = migrate_content(aavikko_build, corvax_dst)
         # No csproj patches needed — Content Mods are copied to Content.*/Aavikko/
         # by Apply.py, and SDK-style csproj picks them up automatically.
@@ -765,8 +846,8 @@ def main():
 
     mods_count = count_files(mods_dir)
     patches_count = count_files(patches_dir)
-    content_patches_count = count_files(corvax_dst / "Aavikko.Content" / "Patches")
-    content_mods_count = count_files(corvax_dst / "Aavikko.Content" / "Mods")
+    content_patches_count = count_files(corvax_dst / "00_Aavikko/02_Content" / "Patches")
+    content_mods_count = count_files(corvax_dst / "00_Aavikko/02_Content" / "Mods")
     total_time = time.time() - t_start
     success_banner(
         f"Migration done in {total_time:.1f}s",
@@ -777,7 +858,7 @@ def main():
             ("Content/Patches/",    f"{content_patches_count} files"),
             ("manifest.yml",        f"{len(conflicts)} delete, {len(dedup_deleted)} stale"),
         ],
-        next_step="python3 Aavikko.Modding/Patcher/Apply.py",
+        next_step="python3 00_Aavikko/00_Modding/Patcher/Apply.py",
     )
 
 

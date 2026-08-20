@@ -1,0 +1,154 @@
+{
+  "name": "aavikko-overlay",
+  "displayName": "Aavikko Overlay",
+  "description": "Overlay/mod workflow for Space Station 14 builds: git-aware dirty tracking, patch decorations, conflict resolution, one-click Apply/Clear.",
+  "version": "0.2.2",
+  "publisher": "aavikko",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other", "SCM Providers"],
+  "keywords": ["ss14", "overlay", "modding", "aavikko"],
+  "activationEvents": [
+    "workspaceContains:**/00_Aavikko/00_Modding/00_Patcher/x00_Apply.py"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Aavikko Overlay",
+      "properties": {
+        "aavikko.pythonPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to Python interpreter (leave empty to auto-detect: python3 → python → py)"
+        },
+        "aavikko.highlightPatchedLines": {
+          "type": "boolean",
+          "default": true,
+          "description": "Highlight lines added by Aavikko patches inside open editors"
+        },
+        "aavikko.autoRefreshOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Refresh Dirty Files view automatically when a file is saved"
+        },
+        "aavikko.autoCheckConflicts": {
+          "type": "boolean",
+          "default": true,
+          "description": "Refresh Conflicts view automatically when upstream HEAD moves (git pull)"
+        }
+      }
+    },
+    "colors": [
+      {
+        "id": "aavikko.modColor",
+        "description": "Color for Aavikko mod files (new files added by Aavikko)",
+        "defaults": { "dark": "#4FC3F7", "light": "#0288D1", "highContrast": "#4FC3F7" }
+      },
+      {
+        "id": "aavikko.patchColor",
+        "description": "Color for Aavikko patch files (upstream files modified by Aavikko)",
+        "defaults": { "dark": "#FFB74D", "light": "#F57C00", "highContrast": "#FFB74D" }
+      },
+      {
+        "id": "aavikko.bothColor",
+        "description": "Color for folders containing both mods and patches",
+        "defaults": { "dark": "#CE93D8", "light": "#8E24AA", "highContrast": "#CE93D8" }
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        { "id": "aavikko", "title": "Aavikko", "icon": "resources/aavikko-icon.svg" }
+      ]
+    },
+    "views": {
+      "aavikko": [
+        { "id": "aavikkoOverview", "name": "Overview", "when": "aavikko.isActive" },
+        { "id": "aavikkoDirtyFiles", "name": "Dirty Files", "when": "aavikko.isActive" },
+        { "id": "aavikkoConflicts", "name": "Conflicts", "when": "aavikko.isActive" }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "aavikkoDirtyFiles",
+        "contents": "No uncaptured changes.\nEdit upstream files, then:\n[Generate All Patches](command:aavikko.generateAll)"
+      },
+      {
+        "view": "aavikkoConflicts",
+        "contents": "No baseline recorded yet.\n[Run Check.py to record baseline](command:aavikko.runCheck)"
+      }
+    ],
+    "commands": [
+      { "command": "aavikko.toggleOverlay", "title": "Toggle Overlay (Apply/Clear)", "category": "Aavikko", "icon": "$(package)" },
+      { "command": "aavikko.apply", "title": "Apply Overlay", "category": "Aavikko", "icon": "$(check)" },
+      { "command": "aavikko.clear", "title": "Clear Overlay (revert upstream)", "category": "Aavikko", "icon": "$(discard)" },
+      { "command": "aavikko.generateAll", "title": "Generate All Patches", "category": "Aavikko", "icon": "$(diff)" },
+      { "command": "aavikko.runCheck", "title": "Check Upstream Conflicts", "category": "Aavikko", "icon": "$(shield)" },
+      { "command": "aavikko.runValidate", "title": "Validate Overlay Placement", "category": "Aavikko", "icon": "$(verified)" },
+      { "command": "aavikko.showStatus", "title": "Show Status", "category": "Aavikko", "icon": "$(info)" },
+      { "command": "aavikko.refreshAll", "title": "Refresh All Views", "category": "Aavikko", "icon": "$(refresh)" },
+      { "command": "aavikko.openDirtyFile", "title": "Open File", "category": "Aavikko" },
+      { "command": "aavikko.generatePatch", "title": "Generate Patch", "category": "Aavikko", "icon": "$(edit)" },
+      { "command": "aavikko.generatePatchRestore", "title": "Generate Patch + Restore File", "category": "Aavikko", "icon": "$(edit)" },
+      { "command": "aavikko.revealDirtyFile", "title": "Reveal in Explorer", "category": "Aavikko", "icon": "$(eye)" },
+      { "command": "aavikko.refreshDirtyFiles", "title": "Refresh Dirty Files", "category": "Aavikko", "icon": "$(refresh)" },
+      { "command": "aavikko.refreshConflicts", "title": "Refresh Conflicts", "category": "Aavikko", "icon": "$(refresh)" },
+      { "command": "aavikko.openConflictDiff", "title": "Diff: upstream changes (old → new)", "category": "Aavikko", "icon": "$(compare-changes)" },
+      { "command": "aavikko.openOurVersion", "title": "Diff: our version vs new upstream", "category": "Aavikko", "icon": "$(split-horizontal)" },
+      { "command": "aavikko.openBothDiffs", "title": "Diff: both side by side", "category": "Aavikko", "icon": "$(columns)" },
+      { "command": "aavikko.openForEditing", "title": "Open for Editing", "category": "Aavikko", "icon": "$(go-to-file)" },
+      { "command": "aavikko.resolvePatch.fr", "title": "Force Replace", "category": "Aavikko", "icon": "$(arrow-right)" },
+      { "command": "aavikko.resolvePatch.u", "title": "Updated", "category": "Aavikko", "icon": "$(check)" },
+      { "command": "aavikko.resolvePatch.s", "title": "Skip Patch", "category": "Aavikko", "icon": "$(close)" },
+      { "command": "aavikko.resolvePatch.i", "title": "Ignore", "category": "Aavikko", "icon": "$(circle-slash)" },
+      { "command": "aavikko.resolveMod.k", "title": "Keep Our Mod", "category": "Aavikko", "icon": "$(arrow-right)" },
+      { "command": "aavikko.resolveMod.r", "title": "Remove Our Mod", "category": "Aavikko", "icon": "$(trash)" },
+      { "command": "aavikko.resolveMod.g", "title": "Convert to Patch", "category": "Aavikko", "icon": "$(arrow-swap)" },
+      { "command": "aavikko.resolveMod.i", "title": "Ignore", "category": "Aavikko", "icon": "$(circle-slash)" }
+    ],
+    "menus": {
+      "view/title": [
+        { "command": "aavikko.refreshAll", "when": "view == aavikkoOverview", "group": "navigation" },
+        { "command": "aavikko.refreshDirtyFiles", "when": "view == aavikkoDirtyFiles", "group": "navigation" },
+        { "command": "aavikko.generateAll", "when": "view == aavikkoDirtyFiles", "group": "navigation@2" },
+        { "command": "aavikko.refreshConflicts", "when": "view == aavikkoConflicts", "group": "navigation" },
+        { "command": "aavikko.runCheck", "when": "view == aavikkoConflicts", "group": "navigation@2" }
+      ],
+      "view/item/context": [
+        { "command": "aavikko.generatePatch", "when": "view == aavikkoDirtyFiles && viewItem =~ /^dirtyFile/", "group": "inline@1" },
+        { "command": "aavikko.generatePatchRestore", "when": "view == aavikkoDirtyFiles && viewItem =~ /^dirtyFile/", "group": "inline@2" },
+        { "command": "aavikko.revealDirtyFile", "when": "view == aavikkoDirtyFiles && viewItem =~ /^dirtyFile/", "group": "2_reveal" },
+        { "command": "aavikko.resolvePatch.fr", "when": "view == aavikkoConflicts && viewItem == conflict_patch", "group": "inline@1" },
+        { "command": "aavikko.resolvePatch.u", "when": "view == aavikkoConflicts && viewItem == conflict_patch", "group": "inline@2" },
+        { "command": "aavikko.resolvePatch.s", "when": "view == aavikkoConflicts && viewItem == conflict_patch", "group": "inline@3" },
+        { "command": "aavikko.resolvePatch.i", "when": "view == aavikkoConflicts && viewItem == conflict_patch", "group": "inline@4" },
+        { "command": "aavikko.resolveMod.k", "when": "view == aavikkoConflicts && viewItem == conflict_mod", "group": "inline@1" },
+        { "command": "aavikko.resolveMod.r", "when": "view == aavikkoConflicts && viewItem == conflict_mod", "group": "inline@2" },
+        { "command": "aavikko.resolveMod.g", "when": "view == aavikkoConflicts && viewItem == conflict_mod", "group": "inline@3" },
+        { "command": "aavikko.resolveMod.i", "when": "view == aavikkoConflicts && viewItem == conflict_mod", "group": "inline@4" },
+        { "command": "aavikko.openConflictDiff", "when": "view == aavikkoConflicts && viewItem =~ /^conflict_/", "group": "9_diff@1" },
+        { "command": "aavikko.openOurVersion", "when": "view == aavikkoConflicts && viewItem =~ /^conflict_/", "group": "9_diff@2" },
+        { "command": "aavikko.openBothDiffs", "when": "view == aavikkoConflicts && viewItem =~ /^conflict_/", "group": "9_diff@3" },
+        { "command": "aavikko.openForEditing", "when": "view == aavikkoConflicts && viewItem =~ /^conflict_/", "group": "9_diff@4" },
+        { "command": "aavikko.apply", "when": "view == aavikkoOverview && viewItem == action_apply", "group": "inline" },
+        { "command": "aavikko.clear", "when": "view == aavikkoOverview && viewItem == action_clear", "group": "inline" }
+      ],
+      "editor/context": [
+        { "command": "aavikko.generatePatch", "when": "aavikko.isActive && resourceExtname == .cs", "group": "aavikko@1" },
+        { "command": "aavikko.generatePatch", "when": "aavikko.isActive && resourceExtname == .xaml", "group": "aavikko@1" }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.24.0",
+    "typescript": "^5.4.0"
+  }
+}

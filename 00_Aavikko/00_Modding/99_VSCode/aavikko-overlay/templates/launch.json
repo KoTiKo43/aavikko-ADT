@@ -1,0 +1,55 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Server (with Aavikko overlay)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "aavikko: apply",
+      "program": "${workspaceFolder}/bin/Content.Server/Content.Server.dll",
+      "args": [
+        "--cvar", "game.auto_pause_empty=false",
+        "--cvar", "console.loginlocal=true",
+        "--cvar", "console.login_host_user=guest@localhost",
+        "--config-file", "${workspaceFolder}/Content.Server/server_config.toml"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Client (with Aavikko overlay)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "aavikko: apply",
+      "program": "${workspaceFolder}/bin/Content.Client/Content.Client.dll",
+      "args": [
+        "--connect", "--connect-address", "127.0.0.1"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Server (pristine — no overlay)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "aavikko: clear",
+      "program": "${workspaceFolder}/bin/Content.Server/Content.Server.dll",
+      "args": [
+        "--cvar", "game.auto_pause_empty=false",
+        "--config-file", "${workspaceFolder}/Content.Server/server_config.toml"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Server + Client (with Aavikko overlay)",
+      "configurations": ["Server (with Aavikko overlay)", "Client (with Aavikko overlay)"],
+      "preLaunchTask": "aavikko: apply"
+    }
+  ]
+}

@@ -3,8 +3,8 @@
 Validate.py — verify ALL .cs.patch and .xaml.patch files apply cleanly.
 
 Scans:
-  - Aavikko.Content/Patches/  (auto-generated + manually created .cs/.xaml patches)
-  - Aavikko.Modding/Patches/  (dev-maintained patches, including RobustToolbox)
+  - 00_Aavikko/02_Content/Patches/  (auto-generated + manually created .cs/.xaml patches)
+  - 00_Aavikko/00_Modding/Patches/  (dev-maintained patches, including RobustToolbox)
 
 For each .patch file:
   1. Runs `git apply --check` against current upstream (working tree must be clean)
@@ -21,7 +21,7 @@ Usage:
   python3 Validate.py            # Check all patches, exit 0 if all pass
   python3 Validate.py --verbose  # Show every patch (not just failures)
   python3 Validate.py --fix      # Try to auto-regenerate broken patches from
-                                   Aavikko-Avaruus-ADT source (if available)
+                                   Aavikko-2.0 source (if available)
 """
 from __future__ import annotations
 
@@ -32,9 +32,9 @@ import sys
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-BUILD_ROOT = SCRIPT_DIR.parent.parent
-CONTENT_PATCHES_DIR = BUILD_ROOT / "Aavikko.Content" / "Patches"
-ROBUST_PATCHES_DIR = BUILD_ROOT / "Aavikko.RobustToolbox" / "Patches"
+BUILD_ROOT = SCRIPT_DIR.parent.parent.parent
+CONTENT_PATCHES_DIR = BUILD_ROOT / "00_Aavikko/02_Content" / "Patches"
+ROBUST_PATCHES_DIR = BUILD_ROOT / "00_Aavikko/03_RobustToolbox" / "Patches"
 ROBUST_DIR = BUILD_ROOT / "RobustToolbox"
 
 # Plain print — no ui.py dependency so this can run standalone in CI
@@ -60,8 +60,8 @@ def run(cmd: str, cwd: Path | None = None) -> tuple[str, str, int]:
 
 
 def collect_patches() -> list[tuple[Path, Path]]:
-    """Find all .cs.patch and .xaml.patch files in Aavikko.Content/Patches/
-    and Aavikko.RobustToolbox/Patches/.
+    """Find all .cs.patch and .xaml.patch files in 00_Aavikko/02_Content/Patches/
+    and 00_Aavikko/03_RobustToolbox/Patches/.
 
     Returns list of (patch_path, cwd) tuples — cwd is BUILD_ROOT for Content.*
     patches, ROBUST_DIR for RobustToolbox patches.
@@ -136,12 +136,12 @@ def validate_patch(patch_path: Path, cwd: Path) -> tuple[bool, str]:
 
 
 def try_repair_from_aavikko_src(patch_path: Path) -> bool:
-    """Attempt to regenerate a broken patch from Aavikko-Avaruus-ADT source.
+    """Attempt to regenerate a broken patch from Aavikko-2.0 source.
 
     Only works if:
-      1. Aavikko-Avaruus-ADT source is available (sibling of build root)
+      1. Aavikko-2.0 source is available (sibling of build root)
       2. The patch corresponds to an upstream .cs/.xaml file
-      3. The same file exists in Aavikko-Avaruus-ADT (with Aavikko changes baked in)
+      3. The same file exists in Aavikko-2.0 (with Aavikko changes baked in)
     """
     # Determine upstream path from patch filename
     try:
@@ -161,13 +161,13 @@ def try_repair_from_aavikko_src(patch_path: Path) -> bool:
     # Try several known Aavikko source locations (relative to BUILD_ROOT)
     # No hard-coded absolute paths — keeps cross-platform compatibility
     aavikko_candidates = [
-        BUILD_ROOT.parent / "Aavikko-Avaruus-ADT",
-        BUILD_ROOT.parent.parent / "Aavikko-Avaruus-ADT",
+        BUILD_ROOT.parent / "Aavikko-2.0",
+        BUILD_ROOT.parent.parent / "Aavikko-2.0",
     ]
     # Also check AAVIKKO_SRC env var (used by Migrate.py)
     env_src = os.environ.get("AAVIKKO_SRC")
     if env_src:
-        # AAVIKKO_SRC points to Resources/, parent is Aavikko-Avaruus-ADT/
+        # AAVIKKO_SRC points to Resources/, parent is Aavikko-2.0/
         aavikko_candidates.append(Path(env_src).parent)
     aavikko_src = None
     for c in aavikko_candidates:
@@ -207,7 +207,7 @@ def main():
     parser.add_argument("--verbose", action="store_true",
                         help="Show every patch (not just failures)")
     parser.add_argument("--fix", action="store_true",
-                        help="Try to auto-regenerate broken patches from Aavikko-Avaruus-ADT source")
+                        help="Try to auto-regenerate broken patches from Aavikko-2.0 source")
     args = parser.parse_args()
 
     print("=" * 70)
@@ -264,13 +264,13 @@ def main():
                   file=sys.stderr)
 
             if args.fix:
-                info(f"Attempting auto-repair from Aavikko-Avaruus-ADT source...")
+                info(f"Attempting auto-repair from Aavikko-2.0 source...")
                 if try_repair_from_aavikko_src(patch):
                     ok(f"Repaired: {rel}")
                     repaired += 1
                     failed -= 1
                 else:
-                    warn(f"Could not auto-repair (Aavikko-Avaruus-ADT source not available or file not found)")
+                    warn(f"Could not auto-repair (Aavikko-2.0 source not available or file not found)")
 
     print()
     print("=" * 70)
@@ -286,7 +286,7 @@ def main():
             print(f"    {err.splitlines()[0] if err else ''}", file=sys.stderr)
         print(f"\nTo fix:", file=sys.stderr)
         print(f"  python3 {SCRIPT_DIR.name}/Validate.py --fix", file=sys.stderr)
-        print(f"  (auto-regenerates from Aavikko-Avaruus-ADT source if available)", file=sys.stderr)
+        print(f"  (auto-regenerates from Aavikko-2.0 source if available)", file=sys.stderr)
         print(f"\nOr manually regenerate:", file=sys.stderr)
         print(f"  python3 {SCRIPT_DIR.name}/Generate.py <upstream_file.cs> --restore",
               file=sys.stderr)

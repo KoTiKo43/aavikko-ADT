@@ -3,7 +3,7 @@
 Apply.py — apply Aavikko mod overlay to upstream SS14 build.
 
 Pipeline:
-  0. Check for unresolved conflicts (Check.py --apply-check)
+  0. Check for unresolved conflicts (x04_Check.py --apply-check)
   1. Delete upstream files (manifest delete: section)
   2. Copy Patches/ → Resources/ (overwrite upstream)
   3. Copy Mods/ → Resources/ (add new content)
@@ -33,7 +33,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 # Shared utilities (single source of truth for run/atomic_write/safe_resolve)
-from common import (
+from l00_common import (
     SCRIPT_DIR, BUILD_ROOT, RESOURCES_DIR, MODS_DIR, PATCHES_DIR, MANIFEST,
     CONTENT_DIR, CS_MODS_DIR, CS_PATCHES_DIR, ROBUST_DIR, ROBUST_OVERLAY_DIR,
     ROBUST_MODS_DIR, ROBUST_PATCHES_DIR, APPLIED_FILE, LOCK_FILE,
@@ -447,12 +447,12 @@ def apply_cs_patch(patch_path: Path, skip_paths: set[str] | None = None,
             print(f"           - Remove the .patch file (Aavikko no longer needs this change)")
             print(f"           - Move .patch to Mods/ (if Aavikko wants to keep the file)")
     else:
-        print(f"         If upstream changed, regenerate: python3 Generate.py <path> --restore")
+        print(f"         If upstream changed, regenerate: python3 x01_Generate.py <path> --restore")
     return False
 
 
 def copy_robust_mods() -> int:
-    """Copy Aavikko.RobustToolbox/Mods/ → RobustToolbox/ (mirror path, overwrite).
+    """Copy 00_Aavikko/03_RobustToolbox/Mods/ → RobustToolbox/ (mirror path, overwrite).
 
     Used for new engine files that Aavikko adds (rare). Returns file count.
     """
@@ -482,15 +482,15 @@ def copy_robust_mods() -> int:
 
 
 def copy_content_mods() -> int:
-    """Copy Aavikko.Content/Mods/ → Content.*/ (mirror path, overwrite).
+    """Copy 00_Aavikko/02_Content/Mods/ → Content.*/ (mirror path, overwrite).
 
     Content Mods are new .cs files that Aavikko adds (e.g. Content.Server/Aavikko/...).
     Unlike Resources Mods, these are C# files that need to be IN the project directory
     so the SDK-style csproj picks them up automatically (no csproj patch needed).
 
     Structure:
-      Aavikko.Content/Mods/Content.Server/Aavikko/Foo.cs → Content.Server/Aavikko/Foo.cs
-      Aavikko.Content/Mods/Content.Shared/Aavikko/Bar.cs → Content.Shared/Aavikko/Bar.cs
+      00_Aavikko/02_Content/Mods/Content.Server/Aavikko/Foo.cs → Content.Server/Aavikko/Foo.cs
+      00_Aavikko/02_Content/Mods/Content.Shared/Aavikko/Bar.cs → Content.Shared/Aavikko/Bar.cs
 
     Returns file count.
     """
@@ -507,7 +507,7 @@ def copy_content_mods() -> int:
             continue
         if any(src.name.endswith(suf) for suf in TEMP_SNAPSHOT_SUFFIXES):
             continue
-        # Mirror path: Aavikko.Content/Mods/Content.Server/Aavikko/Foo.cs → Content.Server/Aavikko/Foo.cs
+        # Mirror path: 00_Aavikko/02_Content/Mods/Content.Server/Aavikko/Foo.cs → Content.Server/Aavikko/Foo.cs
         rel = src.relative_to(CS_MODS_DIR)
         dst = BUILD_ROOT / rel
         dst.parent.mkdir(parents=True, exist_ok=True)
@@ -671,7 +671,7 @@ def main():
     # (which deletes .applied but no longer deletes .symlinks.json). Skipping
     # the rglob fallback saves 0.1-50s depending on disk speed.
     try:
-        import SymLinks
+        import l02_symlinks as SymLinks
         print("\n--- Removing all symlinks (@Mods/@Patches/@Path/@patched) ---", flush=True)
         with _step_timer("Remove symlinks"):
             # Quick check: if neither .applied nor .symlinks.json exists, no symlinks
@@ -723,8 +723,8 @@ def main():
                 print(f"  Applied at: {applied_info.get('applied_at', '?')}")
                 print(f"  Patches: {len(applied_info.get('cs_patches_applied', []))} cs+xaml, "
                       f"{len(applied_info.get('robust_patches_applied', []))} robust")
-                print(f"\n  To re-apply: python3 Apply.py --reapply")
-                print(f"  To revert:   python3 Clear.py")
+                print(f"\n  To re-apply: python3 x00_x00_Apply.py --reapply")
+                print(f"  To revert:   python3 x02_Clear.py")
                 return  # exit 0
             else:
                 print(f"\n[WARN] .applied exists but HEAD moved ({applied_commit[:12]} → {current_commit[:12]})")
@@ -732,7 +732,7 @@ def main():
                 # Run Clear.py to revert upstream, then proceed
                 from subprocess import run as sp_run
                 sp_run(
-                    [sys.executable, "-X", "utf8", str(SCRIPT_DIR / "Clear.py")],
+                    [sys.executable, "-X", "utf8", str(SCRIPT_DIR / "x02_Clear.py")],
                     cwd=BUILD_ROOT, check=False
                 )
         except (json.JSONDecodeError, OSError) as e:
@@ -807,7 +807,7 @@ def main():
         # 0. Check for unresolved conflicts
         if not args.force:
             print("\n--- [0/6] Check for unresolved conflicts ---")
-            with _step_timer("Conflict check (Check.py --apply-check)"):
+            with _step_timer("Conflict check (x04_Check.py --apply-check)"):
                 if not check_conflicts():
                     sys.exit(1)
             print("  [OK] No unresolved conflicts")
@@ -832,7 +832,7 @@ def main():
         with _step_timer("Copy Mods/ → Resources/ (2716+ files)"):
             mods_count = copy_tree(MODS_DIR, "Mods") if MODS_DIR.exists() else 0
 
-        # 4. Apply .cs.patch AND .xaml.patch (from Aavikko.Content/Patches/)
+        # 4. Apply .cs.patch AND .xaml.patch (from 00_Aavikko/02_Content/Patches/)
         #    + Copy Content Mods (.cs files) → Content.*/Aavikko/
         print("\n--- [4/6] Content overlay (patches + mods) ---")
         with _step_timer("Content overlay (patches + mods)"):
@@ -991,7 +991,7 @@ def main():
         # (only if no failures — broken symlinks worse than no symlinks)
         if not failed_patches:
             try:
-                import SymLinks
+                import l02_symlinks as SymLinks
                 print("\n--- Creating @patched symlinks ---")
                 # v0.3.1: Reset state file BEFORE creating new symlinks.
                 # This ensures .symlinks.json contains ONLY the symlinks created
