@@ -1,0 +1,15 @@
+
+- files: ["footsteps.ogg"]
+  license: "CC-BY-3.0"
+  copyright: "Created by https://vsezvuki.com/"
+  source: "https://vsezvuki.com/"
+
+- files: ["growling.ogg"]
+  license: "CC-BY-3.0"
+  copyright: "Created by https://vsezvuki.com/"
+  source: "https://vsezvuki.com/"
+
+- files: ["hit.ogg"]
+  license: "CC-BY-3.0"
+  copyright: "https://vsezvuki.com/"
+  source: "https://vsezvuki.co.m/"

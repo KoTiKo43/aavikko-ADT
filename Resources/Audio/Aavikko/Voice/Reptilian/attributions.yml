@@ -1,0 +1,39 @@
+- files: [hiss1.ogg]
+  copyright: 'Found in the Internet'
+  license: CC BY-NC-SA 3.0
+  source:
+
+- files: [hiss_long.ogg]
+  copyright: 'Found in the Internet'
+  license: CC BY-NC-SA 3.0
+  source:
+
+- files: [hiss2.ogg]
+  copyright: '"snake_hissing1.ogg" by Skyrat SS13'
+  license: CC-BY-SA-3.0
+  source: Skyrat SS13
+
+- files: [raptor_purr.ogg]
+  copyright: '"raptor_purr.ogg" by Skyrat SS13'
+  license: CC-BY-SA-3.0
+  source: Skyrat SS13
+
+- files: [f_u_sneeze.ogg]
+  copyright: '"f_u_sneeze.ogg" by Paradise SS13'
+  license: CC-BY-SA-3.0
+  source: Paradise SS220
+
+- files: [m_u_sneeze.ogg]
+  copyright: '"m_u_sneeze.ogg" by Paradise SS13'
+  license: CC-BY-SA-3.0
+  source: Paradise SS220
+
+- files: [whip_short.ogg]
+  copyright: '"whip_short.ogg" by Paradise SS13'
+  license: CC-BY-SA-3.0
+  source: Paradise SS220
+
+- files: [squeal.ogg]
+  copyright: "Redacted by Valikzant for Aavikko SS14"
+  license: CC BY-NC-SA 3.0
+  source: Shiptest SS13

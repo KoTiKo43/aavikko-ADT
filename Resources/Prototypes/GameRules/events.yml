@@ -684,10 +684,10 @@
     reoccurrenceDelay: 30
   - type: MassHallucinationsRule
     minTimeBetweenIncidents: 0.1
-    maxTimeBetweenIncidents: 300
+    maxTimeBetweenIncidents: 100 # 300 -> 100 Aavikko tweak
     maxSoundDistance: 7
     sounds:
-      collection: ADThallucinations #ADT hallucinations
+      collection: AavikkoNewHallucinations # Aavikko hallucinations
 
 - type: entity
   parent: BaseGameRule
