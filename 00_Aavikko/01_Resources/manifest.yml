@@ -1,0 +1,8 @@
+# Aavikko manifest
+# Generated: 2026-08-20T15:58:47+0300
+
+# Upstream files to delete (prototype ID conflicts)
+delete:
+
+# Stale files (removed by FTL dedup)
+stale:

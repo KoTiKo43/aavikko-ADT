@@ -544,9 +544,9 @@ def check_conflicts() -> bool:
     state_file = SCRIPT_DIR / ".upstream_state.json"
 
     try:
-        import Check  # local import — sibling module
+        import x04_Check as Check  # local import — sibling module (renamed)
     except ImportError as e:
-        print(f"\n[FATAL] Cannot import Check.py: {e}", file=sys.stderr)
+        print(f"\n[FATAL] Cannot import x04_Check.py: {e}", file=sys.stderr)
         return False
 
     if not state_file.exists():
