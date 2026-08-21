@@ -112,23 +112,25 @@ export class DirtyFilesProvider implements vscode.TreeDataProvider<vscode.TreeIt
             return [];
         }
 
-        // "Recent Changes" = files modified AFTER the Apply timestamp.
+        // "Recent Changes" = files WITHOUT overlay (truly new, never captured)
+        //                     OR tracked files edited by user after Apply.
         //
-        // Why not just `!entry.has_overlay`? Because after x00_Apply.py:
-        //   - Files WITH overlay are also "modified" in git (vs HEAD) since overlay
-        //     overwrote the upstream file. They show up as `M` in `git status`.
-        //   - If dev just ran Apply and hasn't touched anything, we don't want ALL
-        //     overlay-tracked files to flood "Recent Changes".
-        //   - We want "Recent Changes" to mean: "files YOU edited after the last Apply"
-        //
-        // So we compare each file's mtime to applyTime. If overlay is NOT applied
-        // (pristine state) — every file with mtime > 0 qualifies, which is too broad.
-        // In that case we fall back to: "any dirty file is recent" (because dev is
-        // editing pristine upstream without overlay).
+        // Why `!entry.has_overlay` OR mtime > applyTime?
+        //   - After x00_Apply.py runs, ALL overlay files are copied to Resources/, so
+        //     their mtime ≈ applyTime. The old `mtime > applyTime` heuristic treated
+        //     every overlay-tracked file as "Recent" because copy sets mtime to NOW
+        //     (slightly after applyTime was recorded). That meant 500+ tracked files
+        //     flooded "Recent Changes" right after Apply.
+        //   - Fix: use a 5-second tolerance window. After Apply, mtimes are within
+        //     ~5s of applyTime → treated as "just applied, not user-edited".
+        //     Real user edits (made minutes/hours later) have mtime >> applyTime+5s
+        //     → correctly go to "Recent Changes".
+        //   - Also `!entry.has_overlay` always goes to Recent (truly new file).
+        const isOverlayApplied = st.state === 'applied';
         const appliedAt = st.applied?.at;
         const applyTime = appliedAt ? new Date(appliedAt).getTime() : 0;
-
-        const isOverlayApplied = st.state === 'applied';
+        // 5-second tolerance: covers Apply.py copy time + clock drift on network drives
+        const APPLY_TOLERANCE_MS = 5000;
 
         const recent: DirtyEntry[] = [];
         const content: DirtyEntry[] = [];
@@ -139,12 +141,12 @@ export class DirtyFilesProvider implements vscode.TreeDataProvider<vscode.TreeIt
             const fullPath = path.join(this.buildRoot, entry.path);
             const mtime = mtimeSafe(fullPath);
 
-            // File qualifies for "Recent Changes" if:
-            //   - Overlay IS applied: file was touched AFTER Apply (mtime > applyTime)
-            //   - Overlay NOT applied: any dirty file qualifies (dev editing pristine)
-            const isRecent = isOverlayApplied
-                ? (applyTime > 0 && mtime > applyTime)
-                : true;
+            // "Recent" (uncaptured change) if:
+            //   - !has_overlay → truly new file, no overlay yet
+            //   - OR mtime significantly newer than applyTime (>5s after Apply)
+            //     → user edited this tracked file AFTER Apply (overlay is stale)
+            const isRecent = !entry.has_overlay
+                || (isOverlayApplied && applyTime > 0 && mtime > applyTime + APPLY_TOLERANCE_MS);
 
             if (isRecent) {
                 recent.push(entry);
@@ -164,10 +166,11 @@ export class DirtyFilesProvider implements vscode.TreeDataProvider<vscode.TreeIt
 
         const items: vscode.TreeItem[] = [];
 
-        // Recent Changes — expanded by default (most actionable)
+        // Recent Changes — expanded by default (most actionable: uncaptured new files,
+        // or tracked files you edited after Apply)
         if (recent.length > 0) {
             const hint = isOverlayApplied
-                ? `Files YOU edited after Apply (mtime > applyTime).\n` +
+                ? `Uncaptured changes (no overlay file yet, OR edited after Apply).\n` +
                   `Action required: open each file, then click the inline ✏ button (Generate Patch)\n` +
                   `to save your changes to Aavikko.* overlay.\n\n` +
                   `${recent.length} file(s)`
