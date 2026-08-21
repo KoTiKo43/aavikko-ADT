@@ -443,8 +443,8 @@ def list_modified_cs(is_robust: bool = False) -> list[str]:
         path = parts[1].strip().split(" -> ")[-1].strip('"')
         # Only .cs files, only modified (M) or added (A) — not deleted
         if path.endswith(".cs") and status[0] in ("M", "A"):
-            # Skip Aavikko.* paths
-            if path.startswith("Aavikko."):
+            # Skip overlay paths (old + new structure)
+            if path.startswith("Aavikko.") or path.startswith("00_Aavikko/"):
                 continue
             modified.append(path)
     return modified
@@ -608,7 +608,7 @@ def main():
 
         # ── Post-step: regenerate showcase map ──
         try:
-            import generate_showcase_map
+            import x09_ShowcaseMap as generate_showcase_map
             saved_argv = sys.argv[:]
             sys.argv = [sys.argv[0]]
             generate_showcase_map.main()

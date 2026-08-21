@@ -1031,7 +1031,7 @@ def main():
         # Scans Patches + Mods for prototype IDs and creates a map with
         # all Aavikko-modified items spawned on a grid.
         try:
-            import generate_showcase_map
+            import x09_ShowcaseMap as generate_showcase_map
             saved_argv = sys.argv[:]
             sys.argv = [sys.argv[0]]
             generate_showcase_map.main()

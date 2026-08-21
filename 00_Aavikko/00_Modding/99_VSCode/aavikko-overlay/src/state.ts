@@ -294,7 +294,7 @@ export class StateManager {
                 if (parts.length < 2) { continue; }
                 const status = parts[0].trim();
                 const p = parts.slice(1).join(' ').split(' -> ').pop()!.replace(/^"|"$/g, '');
-                if (p.endsWith('/') || p.startsWith('Aavikko.') || p.endsWith('.csproj')) { continue; }
+                if (p.endsWith('/') || p.startsWith('Aavikko.') || p.startsWith('00_Aavikko/') || p.endsWith('.csproj')) { continue; }
                 if (!'MA?'.includes(status[0])) { continue; }
                 if (prefix === '' && (p === 'RobustToolbox' || p.startsWith('RobustToolbox/'))) { continue; }
                 const full = prefix + p;
