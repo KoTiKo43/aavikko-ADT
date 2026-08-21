@@ -24,10 +24,10 @@ import re
 import sys
 from pathlib import Path
 
-DEFAULT_SPACING = 1.5
-DEFAULT_ITEMS_PER_ROW = 20
-DEFAULT_START_X = 2.5
-DEFAULT_START_Y = 2.5
+DEFAULT_SPACING = 1.0
+DEFAULT_ITEMS_PER_ROW = 15
+DEFAULT_START_X = 0.5
+DEFAULT_START_Y = 0.5
 
 SPRITE_TYPES = {'jobIcon', 'statusIcon'}
 
@@ -148,12 +148,13 @@ def generate_map_yaml(prototypes, icons, spacing=DEFAULT_SPACING,
         icon_map[proto_id] = f"ShowcaseIcon_{proto_id}"
 
     entity_lines = []
+    entity_count = 0  # Track actual entity count (not line count!)
+    
     # First: entity prototypes (direct spawn)
     for proto_type, proto_id, _, _ in prototypes:
         if proto_type != 'entity':
             continue
-        row = len(entity_lines) // items_per_row  # rough row estimate
-        i = len(entity_lines)
+        i = entity_count
         row = i // items_per_row
         col = i % items_per_row
         x = start_x + col * spacing
@@ -167,16 +168,17 @@ def generate_map_yaml(prototypes, icons, spacing=DEFAULT_SPACING,
         entity_lines.append(f"      pos: {x},{y}")
         entity_lines.append("      parent: 2")
         next_uid += 1
+        entity_count += 1
 
     # Then: icon prototypes (spawn generated entity)
     for proto_type, proto_id, sprite_path, sprite_state in icons:
-        i = len(entity_lines)
+        i = entity_count
         row = i // items_per_row
         col = i % items_per_row
         x = start_x + col * spacing
         y = start_y + row * spacing
 
-        safe_id = icon_map[proto_id]
+        safe_id = f"ShowcaseIcon_{proto_id}"
         entity_lines.append(f'- proto: {safe_id}')
         entity_lines.append("  entities:")
         entity_lines.append(f"  - uid: {next_uid}")
@@ -185,6 +187,7 @@ def generate_map_yaml(prototypes, icons, spacing=DEFAULT_SPACING,
         entity_lines.append(f"      pos: {x},{y}")
         entity_lines.append("      parent: 2")
         next_uid += 1
+        entity_count += 1
 
     entities_block = "\n".join(entity_lines)
 
@@ -259,17 +262,17 @@ def main():
         return 0
 
     # 1. Generate custom icon entity prototypes
-    #    Saved to 00_Aavikko/01_Resources/Prototypes/Aavikko/showcase_icons.yml
-    #    (NOT in upstream — in overlay)
+    #    Saved to 00_Aavikko/01_Resources/Mods/Prototypes/Aavikko/showcase_icons.yml
+    #    (in Mods/ so Apply.py copies them to Resources/)
     if icons:
-        icon_proto_path = resources_dir / "Prototypes" / "Aavikko" / "showcase_icons.yml"
+        icon_proto_path = resources_dir / "Mods" / "Prototypes" / "Aavikko" / "showcase_icons.yml"
         icon_proto_path.parent.mkdir(parents=True, exist_ok=True)
         icon_proto_path.write_text(generate_icon_prototypes(icons), encoding="utf-8")
         print(f"\nIcon prototypes: {icon_proto_path} ({len(icons)} entities)")
 
     # 2. Generate map using empty.yml as template
-    #    Map file saved to 00_Aavikko/01_Resources/Maps/aavikko_showcase.yml
-    #    (NOT in upstream — in overlay)
+    #    Map file saved to 00_Aavikko/01_Resources/Mods/Maps/aavikko_showcase.yml
+    #    (in Mods/ so Apply.py copies it to Resources/Maps/)
     template = build_root / "Resources" / "Maps" / "Test" / "empty.yml"
     map_yaml = generate_map_yaml(
         prototypes, icons, spacing=args.spacing, items_per_row=args.per_row,
@@ -277,24 +280,17 @@ def main():
     )
 
     spawnable = len(entities) + len(icons)
-    map_path = resources_dir / "Maps" / "aavikko_showcase.yml"
+    map_path = resources_dir / "Mods" / "Maps" / "aavikko_showcase.yml"
     map_path.parent.mkdir(parents=True, exist_ok=True)
-    map_yaml = map_yaml.replace(
-        "/Maps/aavikko_showcase.yml",
-        "/00_Aavikko/01_Resources/Maps/aavikko_showcase.yml"
-    )
     map_path.write_text(map_yaml, encoding="utf-8")
     print(f"Map saved: {map_path}")
     print(f"  {spawnable} entities ({len(entities)} direct + {len(icons)} icon)")
     print(f"  Grid: {args.per_row}/row, {args.spacing} spacing")
 
-    # 3. gameMap prototype — also in overlay
-    proto_path = resources_dir / "Prototypes" / "Maps" / "aavikko_showcase.yml"
+    # 3. gameMap prototype — also in Mods/
+    proto_path = resources_dir / "Mods" / "Prototypes" / "Maps" / "aavikko_showcase.yml"
     proto_path.parent.mkdir(parents=True, exist_ok=True)
-    proto = generate_map_prototype()
-    proto = proto.replace("/Maps/aavikko_showcase.yml",
-                          "/00_Aavikko/01_Resources/Maps/aavikko_showcase.yml")
-    proto_path.write_text(proto, encoding="utf-8")
+    proto_path.write_text(generate_map_prototype(), encoding="utf-8")
     print(f"  Prototype: {proto_path}")
 
     print(f"\nTo load: forcemap AavikkoShowcase")
