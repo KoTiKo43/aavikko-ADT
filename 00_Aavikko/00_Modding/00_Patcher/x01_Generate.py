@@ -480,8 +480,8 @@ def list_modified_all() -> list[str]:
         # Skip overlay paths (we don't generate patches for our own overlay)
         if path.startswith("Aavikko."):
             continue
-        # Skip Patcher/ scripts and state files
-        if path.startswith("00_Aavikko/00_Modding/Patcher/"):
+        # Skip ALL 00_Aavikko/ paths (overlay, scripts, VSCode, etc.)
+        if path.startswith("00_Aavikko/"):
             continue
         # Skip .csproj (handled separately via --csproj flag)
         if path.endswith(".csproj"):
@@ -605,6 +605,18 @@ def main():
             f"Saved {saved}/{len(modified)} file(s)",
             next_step=("All upstream files restored to HEAD." if args.restore else None),
         )
+
+        # ── Post-step: regenerate showcase map ──
+        try:
+            import generate_showcase_map
+            saved_argv = sys.argv[:]
+            sys.argv = [sys.argv[0]]
+            generate_showcase_map.main()
+            sys.argv = saved_argv
+        except Exception as e:
+            print(f"  [WARN] Showcase map generation failed: {e}", file=sys.stderr)
+            import traceback
+            traceback.print_exc(file=sys.stderr)
         return
     
     if not args.filepath:

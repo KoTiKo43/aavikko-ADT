@@ -1027,8 +1027,22 @@ def main():
               f"{len(applied_robust)}/{len(robust_patches)} robust patches, "
               f"{robust_mods_count} robust mods")
         print(f"{'=' * 70}")
+        # ── Post-step: generate showcase map ──
+        # Scans Patches + Mods for prototype IDs and creates a map with
+        # all Aavikko-modified items spawned on a grid.
+        try:
+            import generate_showcase_map
+            saved_argv = sys.argv[:]
+            sys.argv = [sys.argv[0]]
+            generate_showcase_map.main()
+            sys.argv = saved_argv
+        except Exception as e:
+            print(f"  [WARN] Showcase map generation failed: {e}", file=sys.stderr)
+            import traceback
+            traceback.print_exc(file=sys.stderr)
+
         print("\nNext: dotnet build Content.Server --no-restore")
-        # Print timing summary to stderr (so it doesn't interfere with stdout parsing)
+        # Print timing summary to stderr
         _print_timing_summary()
 
     finally:
