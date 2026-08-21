@@ -91,9 +91,25 @@ export class OverviewProvider implements vscode.TreeDataProvider<vscode.TreeItem
             `Resources: ${st.overlay.resource_patches.length}p / ${st.overlay.resource_mods.length}m`));
 
         // ── Dirty / conflicts summary ──
-        if (st.dirty.length > 0) {
-            items.push(new InfoItem('Uncaptured changes', `${st.dirty.length}`, 'edit',
-                'Modified upstream files not yet captured into overlay.\nRun Generate to capture them.'));
+        // Split dirty list into two groups:
+        //   - applied files (has_overlay=true) — these are files in upstream
+        //     that Apply.py overwrote with the overlay version. They show as
+        //     'M' or '??' in git status because the working tree differs from
+        //     HEAD. They are NOT uncaptured — they're tracked and applied.
+        //   - truly uncaptured (has_overlay=false) — files the user edited
+        //     without an overlay file yet. These need Generate to capture.
+        const appliedDirty = st.dirty.filter(d => d.has_overlay);
+        const uncapturedDirty = st.dirty.filter(d => !d.has_overlay);
+        if (appliedDirty.length > 0) {
+            items.push(new InfoItem('Applied (tracked)', `${appliedDirty.length}`, 'package',
+                `Overlay-tracked files currently applied to upstream.\n` +
+                `These show as modified in git because Apply.py overwrote them.\n` +
+                `This is normal — run Clear to revert to pristine upstream.`));
+        }
+        if (uncapturedDirty.length > 0) {
+            items.push(new InfoItem('Uncaptured changes', `${uncapturedDirty.length}`, 'edit',
+                'Modified upstream files with NO overlay file yet.\n' +
+                'Run Generate to capture them into the overlay.'));
         }
         const conflicts =
             st.conflicts.patches.length + st.conflicts.mods.length;

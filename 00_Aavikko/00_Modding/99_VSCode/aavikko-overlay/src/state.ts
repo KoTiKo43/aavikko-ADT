@@ -295,6 +295,9 @@ export class StateManager {
                 const status = parts[0].trim();
                 const p = parts.slice(1).join(' ').split(' -> ').pop()!.replace(/^"|"$/g, '');
                 if (p.endsWith('/') || p.startsWith('Aavikko.') || p.startsWith('00_Aavikko/') || p.endsWith('.csproj')) { continue; }
+                // Also skip files inside the Aavikko VS Code overlay source dir
+                // (these are dev artifacts — .vsix, .ts, .js — not real game files)
+                if (p.startsWith('00_Aavikko/00_Modding/99_VSCode/')) { continue; }
                 if (!'MA?'.includes(status[0])) { continue; }
                 if (prefix === '' && (p === 'RobustToolbox' || p.startsWith('RobustToolbox/'))) { continue; }
                 const full = prefix + p;

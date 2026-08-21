@@ -478,7 +478,9 @@ def list_modified_all() -> list[str]:
         if status[0] not in ("M", "A"):
             continue
         # Skip overlay paths (we don't generate patches for our own overlay)
-        if path.startswith("Aavikko."):
+        # Skip overlay source dirs — they're not upstream files.
+    # Old layout used "Aavikko.*", new layout uses "00_Aavikko/".
+    if path.startswith("Aavikko.") or path.startswith("00_Aavikko/"):
             continue
         # Skip ALL 00_Aavikko/ paths (overlay, scripts, VSCode, etc.)
         if path.startswith("00_Aavikko/"):

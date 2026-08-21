@@ -67,7 +67,11 @@ export class AavikkoStatusBar {
                 (st.applied?.cs_patches_applied?.length ?? 0) +
                 (st.applied?.robust_patches_applied?.length ?? 0);
             const failed = st.applied?.cs_patches_failed?.length ?? 0;
-            const dirty = st.dirty.length;
+            // Only count files WITHOUT overlay as "dirty" — files WITH overlay
+            // are expected to show as M/?? after Apply (they were copied there).
+            // Counting them all would always show 500+ dirty right after Apply,
+            // which is misleading.
+            const dirty = st.dirty.filter(d => !d.has_overlay).length;
             const suffix = dirty > 0 ? ` · ${dirty} dirty` : '';
             this.item.text = `$(package) Aavikko: Applied (${patches}p${suffix})`;
             const lines = [
@@ -76,6 +80,10 @@ export class AavikkoStatusBar {
             ];
             if (dirty > 0) {
                 lines.push(`${dirty} uncaptured change(s) — run Generate`);
+            }
+            const appliedTracked = st.dirty.filter(d => d.has_overlay).length;
+            if (appliedTracked > 0) {
+                lines.push(`${appliedTracked} overlay-tracked file(s) applied (normal)`);
             }
             lines.push('', 'Click for actions');
             this.item.tooltip = lines.join('\n');

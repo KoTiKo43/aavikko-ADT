@@ -93,7 +93,9 @@ def is_dirty_candidate(status: str, path: str) -> bool:
     """Filter for git status --porcelain entries (mirrors Generate.py)."""
     if not status or status[0] not in ("M", "A", "?"):
         return False
-    if path.startswith("Aavikko."):
+    # Skip overlay source dirs — they're not upstream files.
+    # Old layout used "Aavikko.*", new layout uses "00_Aavikko/".
+    if path.startswith("Aavikko.") or path.startswith("00_Aavikko/"):
         return False
     # RobustToolbox is scanned separately (its own git repo)
     if path == "RobustToolbox" or path.startswith("RobustToolbox/"):
