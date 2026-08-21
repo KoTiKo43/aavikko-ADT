@@ -6,7 +6,7 @@ import { StateManager } from './state';
 /**
  * File explorer badges + inline editor highlight of patched lines.
  *
- * v0.2: decorations are computed from the Status.py overlay inventory
+ * v0.2: decorations are computed from the x03_Status.py overlay inventory
  * (single source of truth) instead of a parallel JS re-scan.
  */
 

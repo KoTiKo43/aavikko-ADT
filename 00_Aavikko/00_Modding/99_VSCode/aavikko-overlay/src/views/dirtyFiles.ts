@@ -6,7 +6,7 @@ import { DirtyEntry, StateManager } from '../state';
 /**
  * Dirty Files — upstream files changed since HEAD, not yet captured.
  *
- * v0.2: source of truth is `git status --porcelain` (via Status.py) instead of
+ * v0.2: source of truth is `git status --porcelain` (via x03_Status.py) instead of
  * v0.1's mtime scan — correct after checkouts/touches, shows untracked files,
  * works for RobustToolbox too, and doesn't require overlay to be applied.
  *
@@ -114,7 +114,7 @@ export class DirtyFilesProvider implements vscode.TreeDataProvider<vscode.TreeIt
 
         // "Recent Changes" = files modified AFTER the Apply timestamp.
         //
-        // Why not just `!entry.has_overlay`? Because after Apply.py:
+        // Why not just `!entry.has_overlay`? Because after x00_Apply.py:
         //   - Files WITH overlay are also "modified" in git (vs HEAD) since overlay
         //     overwrote the upstream file. They show up as `M` in `git status`.
         //   - If dev just ran Apply and hasn't touched anything, we don't want ALL
@@ -173,7 +173,7 @@ export class DirtyFilesProvider implements vscode.TreeDataProvider<vscode.TreeIt
                   `${recent.length} file(s)`
                 : `Overlay is NOT applied. ALL modified files shown here.\n` +
                   `⚠ WARNING: you are editing pristine upstream — changes will be lost!\n` +
-                  `Run Apply.py first, then re-edit.\n\n` +
+                  `Run x00_Apply.py first, then re-edit.\n\n` +
                   `${recent.length} file(s)`;
             items.push(new GroupItem(
                 'Recent Changes',

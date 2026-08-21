@@ -4,7 +4,7 @@
 
 ## Что нового в 0.2.0
 
-- **Status.py-мост** — единственный источник правды о состоянии (Python считает, расширение показывает). Без Status.py работает fallback на чистом JS.
+- **x03_Status.py-мост** — единственный источник правды о состоянии (Python считает, расширение показывает). Без x03_Status.py работает fallback на чистом JS.
 - **Dirty Files через git** — `git status --porcelain` вместо сканирования по mtime: корректно после checkout/pull, видит untracked-файлы, поддерживает RobustToolbox.
 - **Overview-панель** — состояние overlay, ветка/HEAD, счётчики патчей и модов, быстрые действия.
 - **Безопасный запуск скриптов** — `execFile` без shell (нет проблем с кавычками/инъекциями), автодетект `python3 → python → py` (Windows-friendly).
@@ -31,7 +31,7 @@ code --install-extension aavikko-overlay-0.2.0.vsix
 # или: Extensions view → «...» → Install from VSIX…
 ```
 
-Расширение активируется автоматически, если в workspace есть `Aavikko.Modding/Patcher/Apply.py`.
+Расширение активируется автоматически, если в workspace есть `00_Aavikko/00_Modding/00_Patcher/x00_Apply.py`.
 
 ## Сборка из исходников
 

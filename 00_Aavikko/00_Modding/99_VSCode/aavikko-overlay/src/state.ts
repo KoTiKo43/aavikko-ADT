@@ -7,9 +7,9 @@ import { log, logError } from './logger';
 /**
  * Central state — single source of truth for the whole extension.
  *
- * Primary source: Status.py --json (authoritative, computed by Python).
+ * Primary source: x03_Status.py --json (authoritative, computed by Python).
  * Fallback: .applied marker + git porcelain from JS (for older Patcher
- * versions without Status.py).
+ * versions without x03_Status.py).
  */
 
 export interface GitInfo {
@@ -165,10 +165,10 @@ export class StateManager {
         return path.join(this.patcherDir, '.conflict_decisions.yml');
     }
 
-    /** Refresh status. Prefers Status.py; falls back to built-in JS logic. */
+    /** Refresh status. Prefers x03_Status.py; falls back to built-in JS logic. */
     async refresh(): Promise<AavikkoStatus> {
         // Don't refresh if already refreshing (avoid stacking concurrent
-        // Status.py subprocesses — they each take 1-2s).
+        // x03_Status.py subprocesses — they each take 1-2s).
         if (this.refreshing) {
             return this.status;
         }
@@ -182,14 +182,14 @@ export class StateManager {
                     try {
                         const parsed = JSON.parse(result.stdout.trim());
                         if (parsed.error) {
-                            logError('Status.py reported error', parsed.error);
+                            logError('x03_Status.py reported error', parsed.error);
                         } else {
                             this.status = this.normalize(parsed);
                             this._onDidChange.fire(this.status);
                             return this.status;
                         }
                     } catch (e) {
-                        logError('Failed to parse Status.py output', e);
+                        logError('Failed to parse x03_Status.py output', e);
                     }
                 }
             }
@@ -224,11 +224,11 @@ export class StateManager {
     }
 
     /**
-     * Fallback for older Patcher without Status.py:
+     * Fallback for older Patcher without x03_Status.py:
      * .applied marker + git status --porcelain (root + RobustToolbox).
      */
     private async fallbackStatus(): Promise<AavikkoStatus> {
-        log('Status.py not found — using built-in fallback status');
+        log('x03_Status.py not found — using built-in fallback status');
         const applied = this.readAppliedMarker();
         const git = await this.fallbackGitInfo();
         const dirty = await this.fallbackDirty();

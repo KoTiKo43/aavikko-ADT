@@ -84,7 +84,7 @@ export async function runScript(
 
 /**
  * Run a Patcher script in the integrated terminal (for interactive scripts
- * like Check.py with prompts). Reuses a single "Aavikko" terminal.
+ * like x04_Check.py with prompts). Reuses a single "Aavikko" terminal.
  *
  * Cross-platform shell handling:
  *   - On Windows, VS Code's default terminal is PowerShell, which does NOT

@@ -39,13 +39,13 @@ export class AavikkoStatusBar {
             '⚠ **WARNING** ⚠\n\n' +
             'Overlay is **NOT** applied. You are editing pristine upstream files.\n\n' +
             'Any changes you make here will be **LOST** when:\n' +
-            '- You run `Clear.py`\n' +
+            '- You run `x02_Clear.py`\n' +
             '- You run `git checkout` / `git pull`\n' +
             '- VS Code reloads\n\n' +
             '### To save your changes properly:\n' +
-            '1. Run `Apply.py` first (status bar → "Aavikko: Pristine")\n' +
+            '1. Run `x00_Apply.py` first (status bar → "Aavikko: Pristine")\n' +
             '2. Edit the file (now it has overlay applied)\n' +
-            '3. Run `Generate.py` to save the diff as `.patch`\n' +
+            '3. Run `x01_Generate.py` to save the diff as `.patch`\n' +
             '4. Or use the **Dirty Files** panel → **Generate Patch** button\n\n' +
             '**Click this banner to open the action menu.**'
         );

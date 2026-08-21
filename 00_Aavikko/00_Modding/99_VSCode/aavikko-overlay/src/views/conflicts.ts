@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { ConflictEntry, StateManager } from '../state';
 
-/** Conflicts view — driven by StateManager (Status.py / Check.py data). */
+/** Conflicts view — driven by StateManager (x03_Status.py / x04_Check.py data). */
 
 export interface ConflictData {
     type: 'patch' | 'mod';
@@ -67,7 +67,7 @@ export class ConflictTreeProvider implements vscode.TreeDataProvider<vscode.Tree
 
         if (!st.baseline_recorded) {
             const noBaseline = new vscode.TreeItem(
-                'No baseline — run Check.py first', vscode.TreeItemCollapsibleState.None);
+                'No baseline — run x04_Check.py first', vscode.TreeItemCollapsibleState.None);
             noBaseline.iconPath = new vscode.ThemeIcon('warning');
             noBaseline.command = { command: 'aavikko.runCheck', title: 'Run Check' };
             items.push(noBaseline);

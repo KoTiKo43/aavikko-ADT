@@ -55,14 +55,14 @@ export class OverviewProvider implements vscode.TreeDataProvider<vscode.TreeItem
             stateItem.contextValue = 'state_applied';
             items.push(stateItem);
             items.push(new ActionItem('Clear Overlay', 'discard', 'aavikko.clear', 'action_clear',
-                'Revert upstream to pristine state (Clear.py)'));
+                'Revert upstream to pristine state (x02_Clear.py)'));
         } else {
             const stateItem = new InfoItem('Upstream pristine', 'not applied', 'circle-outline',
                 'Overlay is not applied — upstream files are untouched');
             stateItem.contextValue = 'state_pristine';
             items.push(stateItem);
             items.push(new ActionItem('Apply Overlay', 'check', 'aavikko.apply', 'action_apply',
-                'Apply patches + copy mods into upstream (Apply.py)'));
+                'Apply patches + copy mods into upstream (x00_Apply.py)'));
         }
 
         // ── Git ──
@@ -104,11 +104,11 @@ export class OverviewProvider implements vscode.TreeDataProvider<vscode.TreeItem
 
         // ── Quick actions ──
         items.push(new ActionItem('Generate All Patches', 'diff', 'aavikko.generateAll', 'action',
-            'Capture all modified upstream files into overlay (Generate.py --all)'));
+            'Capture all modified upstream files into overlay (x01_Generate.py --all)'));
         items.push(new ActionItem('Check Conflicts', 'shield', 'aavikko.runCheck', 'action',
-            'Detect upstream changes conflicting with overlay (Check.py)'));
+            'Detect upstream changes conflicting with overlay (x04_Check.py)'));
         items.push(new ActionItem('Validate Overlay', 'verified', 'aavikko.runValidate', 'action',
-            'Sanity-check overlay placement (Validate.py)'));
+            'Sanity-check overlay placement (x05_Validate.py)'));
 
         return items;
     }

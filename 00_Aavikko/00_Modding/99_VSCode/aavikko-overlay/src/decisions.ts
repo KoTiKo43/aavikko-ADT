@@ -73,7 +73,7 @@ function serializeDecisions(doc: DecisionsDoc): string {
     const out: string[] = [];
     const header = doc.header.length
         ? doc.header
-        : ['# Aavikko conflict decisions', '# Managed by the Aavikko VS Code extension / Check.py'];
+        : ['# Aavikko conflict decisions', '# Managed by the Aavikko VS Code extension / x04_Check.py'];
     out.push(...header, '');
 
     const emitSection = (name: string, entries: Record<string, DecisionEntry>) => {

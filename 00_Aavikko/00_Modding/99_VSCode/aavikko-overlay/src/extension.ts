@@ -186,7 +186,7 @@ function registerCommands(
     cmd('aavikko.runValidate', () => runHeadless('x05_Validate.py', [], 'Validating overlay'));
     cmd('aavikko.refreshAll', async () => { await refresh(); });
 
-    // Check.py is interactive (conflict prompts) — run in terminal
+    // x04_Check.py is interactive (conflict prompts) — run in terminal
     cmd('aavikko.runCheck', async () => {
         const python = await getPython();
         if (!python) {
@@ -194,13 +194,13 @@ function registerCommands(
             return;
         }
         // -X utf8 forces UTF-8 mode (Windows cp1251 fix)
-        runScriptInTerminal(patcherDir, `${python} -X utf8 Check.py`);
+        runScriptInTerminal(patcherDir, `${python} -X utf8 x04_Check.py`);
     });
 
     cmd('aavikko.showStatus', async () => {
         const python = await getPython();
         if (python) {
-            runScriptInTerminal(patcherDir, `${python} -X utf8 Status.py`);
+            runScriptInTerminal(patcherDir, `${python} -X utf8 x03_Status.py`);
         }
         showLog();
     });
