@@ -63,9 +63,18 @@ export class AavikkoStatusBar {
         const st = this.state.current;
         this.item.backgroundColor = undefined;
         if (st.state === 'applied') {
-            const patches =
-                (st.applied?.cs_patches_applied?.length ?? 0) +
-                (st.applied?.robust_patches_applied?.length ?? 0);
+            // Count ALL applied files (not just .cs.patch — those are 0 in ADT-overlay
+            // where everything is Resources copies). For a useful indicator:
+            //   patches = .cs.patch applied + RobustToolbox .cs.patch applied + Resources patches copied
+            //   mods     = Resources mods copied + Content mods + Robust mods
+            const csPatches = st.applied?.cs_patches_applied?.length ?? 0;
+            const robustPatches = st.applied?.robust_patches_applied?.length ?? 0;
+            const patchesCopied = st.applied?.counts?.patches_copied ?? 0;
+            const modsCopied = st.applied?.counts?.mods_copied ?? 0;
+            const contentMods = st.applied?.counts?.content_mods_copied ?? 0;
+            const robustMods = st.applied?.counts?.robust_mods_copied ?? 0;
+            const totalPatches = csPatches + robustPatches + patchesCopied;
+            const totalMods = modsCopied + contentMods + robustMods;
             const failed = st.applied?.cs_patches_failed?.length ?? 0;
             // Only count files WITHOUT overlay as "dirty" — files WITH overlay
             // are expected to show as M/?? after Apply (they were copied there).
@@ -73,10 +82,11 @@ export class AavikkoStatusBar {
             // which is misleading.
             const dirty = st.dirty.filter(d => !d.has_overlay).length;
             const suffix = dirty > 0 ? ` · ${dirty} dirty` : '';
-            this.item.text = `$(package) Aavikko: Applied (${patches}p${suffix})`;
+            this.item.text = `$(package) Aavikko: Applied (${totalPatches}p · ${totalMods}m${suffix})`;
             const lines = [
                 `Overlay applied at ${st.applied?.at ?? '?'}`,
-                `Patches: ${patches}` + (failed ? ` (${failed} FAILED)` : ''),
+                `Patches: ${totalPatches} (${csPatches} cs + ${robustPatches} robust + ${patchesCopied} resources)` + (failed ? ` (${failed} FAILED)` : ''),
+                `Mods: ${totalMods} (${modsCopied} resources + ${contentMods} content + ${robustMods} robust)`,
             ];
             if (dirty > 0) {
                 lines.push(`${dirty} uncaptured change(s) — run Generate`);

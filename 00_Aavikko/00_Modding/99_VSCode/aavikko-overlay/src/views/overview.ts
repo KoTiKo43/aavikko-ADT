@@ -47,11 +47,21 @@ export class OverviewProvider implements vscode.TreeDataProvider<vscode.TreeItem
 
         // ── State ──
         if (st.state === 'applied') {
-            const appliedCount =
-                (st.applied?.cs_patches_applied?.length ?? 0) +
-                (st.applied?.robust_patches_applied?.length ?? 0);
-            const stateItem = new InfoItem('Overlay applied', `${appliedCount} patches`, 'check-all',
-                `Applied at ${st.applied?.at ?? '?'}\nHEAD: ${st.applied?.head_commit ?? '?'}`);
+            // Count ALL applied files (Resources copies + Content/Robust .cs.patch).
+            // The old logic only counted cs_patches_applied which is 0 in ADT-overlay
+            // (where everything is Resources copies).
+            const csPatches = st.applied?.cs_patches_applied?.length ?? 0;
+            const robustPatches = st.applied?.robust_patches_applied?.length ?? 0;
+            const patchesCopied = st.applied?.counts?.patches_copied ?? 0;
+            const modsCopied = st.applied?.counts?.mods_copied ?? 0;
+            const contentMods = st.applied?.counts?.content_mods_copied ?? 0;
+            const robustMods = st.applied?.counts?.robust_mods_copied ?? 0;
+            const totalPatches = csPatches + robustPatches + patchesCopied;
+            const totalMods = modsCopied + contentMods + robustMods;
+            const stateItem = new InfoItem('Overlay applied', `${totalPatches} patches · ${totalMods} mods`, 'check-all',
+                `Applied at ${st.applied?.at ?? '?'}\nHEAD: ${st.applied?.head_commit ?? '?'}\n` +
+                `Patches: ${csPatches} cs + ${robustPatches} robust + ${patchesCopied} resources\n` +
+                `Mods: ${modsCopied} resources + ${contentMods} content + ${robustMods} robust`);
             stateItem.contextValue = 'state_applied';
             items.push(stateItem);
             items.push(new ActionItem('Clear Overlay', 'discard', 'aavikko.clear', 'action_clear',
