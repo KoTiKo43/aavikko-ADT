@@ -2,7 +2,7 @@
   "name": "aavikko-overlay",
   "displayName": "Aavikko Overlay",
   "description": "Overlay/mod workflow for Space Station 14 builds: git-aware dirty tracking, patch decorations, conflict resolution, one-click Apply/Clear.",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "publisher": "aavikko",
   "license": "MIT",
   "engines": {
