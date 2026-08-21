@@ -1,0 +1,16 @@
+- type: gameMap
+  id: AavikkoShowcase
+  mapName: 'Aavikko Showcase'
+  mapPath: /Maps/aavikko_showcase.yml
+  minPlayers: 0
+  maxPlayers: 1
+  fallback: false
+  stations:
+    AavikkoShowcase:
+      stationProto: StandardNanotrasenStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Aavikko Showcase'
+        - type: StationJobs
+          availableJobs:
+            Passenger: [ -1, -1 ]

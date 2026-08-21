@@ -1,0 +1,1725 @@
+meta:
+  format: 7
+  category: Map
+  engineVersion: 266.0.0
+  forkId: ""
+  forkVersion: ""
+  time: 08/31/2025 14:22:33
+  entityCount: 4
+maps:
+- 3
+grids:
+- 2
+orphans: []
+nullspace: []
+tilemap:
+  0: Space
+  89: FloorSteel
+entities:
+- proto: ""
+  entities:
+  - uid: 2
+    components:
+    - type: MetaData
+    - type: Transform
+      parent: 3
+    - type: MapGrid
+      chunks:
+        -1,-1:
+          ind: -1,-1
+          tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWQAAAAAAAA==
+          version: 7
+    - type: Broadphase
+    - type: Physics
+      bodyStatus: InAir
+      angularDamping: 0.05
+      linearDamping: 0.05
+      fixedRotation: False
+      bodyType: Dynamic
+    - type: Fixtures
+      fixtures: {}
+    - type: BecomesStation
+      id: AavikkoShowcase
+    - type: OccluderTree
+    - type: Shuttle
+      dampingModifier: 0.25
+    - type: GridPathfinding
+    - type: Gravity
+      gravityShakeSound: !type:SoundPathSpecifier
+        path: /Audio/Effects/alert.ogg
+    - type: DecalGrid
+      chunkCollection:
+        version: 2
+        nodes: []
+    - type: SpreaderGrid
+    - type: ImplicitRoof
+  - uid: 3
+    components:
+    - type: MetaData
+      name: "Aavikko Showcase Map"
+    - type: Transform
+    - type: Map
+      mapPaused: True
+    - type: GridTree
+    - type: Broadphase
+    - type: OccluderTree
+- proto: SpawnPointAnyJob
+  entities:
+  - uid: 4
+    components:
+    - type: Transform
+      pos: -0.5,-0.5
+      parent: 2
+- proto: SpawnPointLatejoin
+  entities:
+  - uid: 1
+    components:
+    - type: Transform
+      pos: -0.5,-0.5
+      parent: 2
+- proto: ADTAnomalistIDCard
+  entities:
+  - uid: 5
+    components:
+    - type: Transform
+      pos: 0.5,0.5
+      parent: 2
+- proto: ADTBakerIDCard
+  entities:
+  - uid: 6
+    components:
+    - type: Transform
+      pos: 1.5,0.5
+      parent: 2
+- proto: ADTBarberIDCard
+  entities:
+  - uid: 7
+    components:
+    - type: Transform
+      pos: 2.5,0.5
+      parent: 2
+- proto: ADTBardIDCard
+  entities:
+  - uid: 8
+    components:
+    - type: Transform
+      pos: 3.5,0.5
+      parent: 2
+- proto: ADTBaristaIDCard
+  entities:
+  - uid: 9
+    components:
+    - type: Transform
+      pos: 4.5,0.5
+      parent: 2
+- proto: ADTBlueShieldOfficerIDCard
+  entities:
+  - uid: 10
+    components:
+    - type: Transform
+      pos: 5.5,0.5
+      parent: 2
+- proto: ADTButcherIDCard
+  entities:
+  - uid: 11
+    components:
+    - type: Transform
+      pos: 6.5,0.5
+      parent: 2
+- proto: ADTCMOIDCard
+  entities:
+  - uid: 12
+    components:
+    - type: Transform
+      pos: 7.5,0.5
+      parent: 2
+- proto: ADTCentcomConsultantIDCard
+  entities:
+  - uid: 13
+    components:
+    - type: Transform
+      pos: 8.5,0.5
+      parent: 2
+- proto: ADTClergymanIDCard
+  entities:
+  - uid: 14
+    components:
+    - type: Transform
+      pos: 9.5,0.5
+      parent: 2
+- proto: ADTClinicianIDCard
+  entities:
+  - uid: 15
+    components:
+    - type: Transform
+      pos: 10.5,0.5
+      parent: 2
+- proto: ADTCoachIDCard
+  entities:
+  - uid: 16
+    components:
+    - type: Transform
+      pos: 11.5,0.5
+      parent: 2
+- proto: ADTComposerIDCard
+  entities:
+  - uid: 17
+    components:
+    - type: Transform
+      pos: 12.5,0.5
+      parent: 2
+- proto: ADTConcertmasterIDCard
+  entities:
+  - uid: 18
+    components:
+    - type: Transform
+      pos: 13.5,0.5
+      parent: 2
+- proto: ADTConfectionerIDCard
+  entities:
+  - uid: 19
+    components:
+    - type: Transform
+      pos: 14.5,0.5
+      parent: 2
+- proto: ADTCorrectionsOfficerIDCard
+  entities:
+  - uid: 20
+    components:
+    - type: Transform
+      pos: 0.5,1.5
+      parent: 2
+- proto: ADTDJIDCard
+  entities:
+  - uid: 21
+    components:
+    - type: Transform
+      pos: 1.5,1.5
+      parent: 2
+- proto: ADTDoctorIDCard
+  entities:
+  - uid: 22
+    components:
+    - type: Transform
+      pos: 2.5,1.5
+      parent: 2
+- proto: ADTEcologistIDCard
+  entities:
+  - uid: 23
+    components:
+    - type: Transform
+      pos: 3.5,1.5
+      parent: 2
+- proto: ADTElectricianIDCard
+  entities:
+  - uid: 24
+    components:
+    - type: Transform
+      pos: 4.5,1.5
+      parent: 2
+- proto: ADTEthnologistIDCard
+  entities:
+  - uid: 25
+    components:
+    - type: Transform
+      pos: 5.5,1.5
+      parent: 2
+- proto: ADTExorcistIDCard
+  entities:
+  - uid: 26
+    components:
+    - type: Transform
+      pos: 6.5,1.5
+      parent: 2
+- proto: ADTFieldDoctorIDCard
+  entities:
+  - uid: 27
+    components:
+    - type: Transform
+      pos: 7.5,1.5
+      parent: 2
+- proto: ADTFoolIDCard
+  entities:
+  - uid: 28
+    components:
+    - type: Transform
+      pos: 8.5,1.5
+      parent: 2
+- proto: ADTGardenerIDCard
+  entities:
+  - uid: 29
+    components:
+    - type: Transform
+      pos: 9.5,1.5
+      parent: 2
+- proto: ADTGladiatorIDCard
+  entities:
+  - uid: 30
+    components:
+    - type: Transform
+      pos: 10.5,1.5
+      parent: 2
+- proto: ADTHandToHandCombatMasterIDCard
+  entities:
+  - uid: 31
+    components:
+    - type: Transform
+      pos: 11.5,1.5
+      parent: 2
+- proto: ADTIntendantIDCard
+  entities:
+  - uid: 32
+    components:
+    - type: Transform
+      pos: 12.5,1.5
+      parent: 2
+- proto: ADTInventoryAssociateIDCard
+  entities:
+  - uid: 33
+    components:
+    - type: Transform
+      pos: 13.5,1.5
+      parent: 2
+- proto: ADTInvestigatorIDCard
+  entities:
+  - uid: 34
+    components:
+    - type: Transform
+      pos: 14.5,1.5
+      parent: 2
+- proto: ADTJesterIDCard
+  entities:
+  - uid: 35
+    components:
+    - type: Transform
+      pos: 0.5,2.5
+      parent: 2
+- proto: ADTJournalistIDCard
+  entities:
+  - uid: 36
+    components:
+    - type: Transform
+      pos: 1.5,2.5
+      parent: 2
+- proto: ADTJudoistIDCard
+  entities:
+  - uid: 37
+    components:
+    - type: Transform
+      pos: 2.5,2.5
+      parent: 2
+- proto: ADTKaratekaIDCard
+  entities:
+  - uid: 38
+    components:
+    - type: Transform
+      pos: 3.5,2.5
+      parent: 2
+- proto: ADTKickboxerIDCard
+  entities:
+  - uid: 39
+    components:
+    - type: Transform
+      pos: 4.5,2.5
+      parent: 2
+- proto: ADTLabTechIDCard
+  entities:
+  - uid: 40
+    components:
+    - type: Transform
+      pos: 5.5,2.5
+      parent: 2
+- proto: ADTLawyerIDCard
+  entities:
+  - uid: 41
+    components:
+    - type: Transform
+      pos: 6.5,2.5
+      parent: 2
+- proto: ADTLifeSupportTechIDCard
+  entities:
+  - uid: 42
+    components:
+    - type: Transform
+      pos: 7.5,2.5
+      parent: 2
+- proto: ADTMMAFighterIDCard
+  entities:
+  - uid: 43
+    components:
+    - type: Transform
+      pos: 8.5,2.5
+      parent: 2
+- proto: ADTMaidIDCard
+  entities:
+  - uid: 44
+    components:
+    - type: Transform
+      pos: 9.5,2.5
+      parent: 2
+- proto: ADTMechAssemblerIDCard
+  entities:
+  - uid: 45
+    components:
+    - type: Transform
+      pos: 10.5,2.5
+      parent: 2
+- proto: ADTMechanicIDCard
+  entities:
+  - uid: 46
+    components:
+    - type: Transform
+      pos: 11.5,2.5
+      parent: 2
+- proto: ADTMinerIDCard
+  entities:
+  - uid: 47
+    components:
+    - type: Transform
+      pos: 12.5,2.5
+      parent: 2
+- proto: ADTMixologistIDCard
+  entities:
+  - uid: 48
+    components:
+    - type: Transform
+      pos: 13.5,2.5
+      parent: 2
+- proto: ADTMonkIDCard
+  entities:
+  - uid: 49
+    components:
+    - type: Transform
+      pos: 14.5,2.5
+      parent: 2
+- proto: ADTMythologistIDCard
+  entities:
+  - uid: 50
+    components:
+    - type: Transform
+      pos: 0.5,3.5
+      parent: 2
+- proto: ADTPassagerRDIDCard
+  entities:
+  - uid: 51
+    components:
+    - type: Transform
+      pos: 1.5,3.5
+      parent: 2
+- proto: ADTPathologistIDCard
+  entities:
+  - uid: 52
+    components:
+    - type: Transform
+      pos: 2.5,3.5
+      parent: 2
+- proto: ADTPerformerIDCard
+  entities:
+  - uid: 53
+    components:
+    - type: Transform
+      pos: 3.5,3.5
+      parent: 2
+- proto: ADTPizzaioloIDCard
+  entities:
+  - uid: 54
+    components:
+    - type: Transform
+      pos: 4.5,3.5
+      parent: 2
+- proto: ADTPlasmaScientistIDCard
+  entities:
+  - uid: 55
+    components:
+    - type: Transform
+      pos: 5.5,3.5
+      parent: 2
+- proto: ADTPostmanIDCard
+  entities:
+  - uid: 56
+    components:
+    - type: Transform
+      pos: 6.5,3.5
+      parent: 2
+- proto: ADTPracticalNurseIDCard
+  entities:
+  - uid: 57
+    components:
+    - type: Transform
+      pos: 7.5,3.5
+      parent: 2
+- proto: ADTPriestIDCard
+  entities:
+  - uid: 58
+    components:
+    - type: Transform
+      pos: 8.5,3.5
+      parent: 2
+- proto: ADTPsychiatristIDCard
+  entities:
+  - uid: 59
+    components:
+    - type: Transform
+      pos: 9.5,3.5
+      parent: 2
+- proto: ADTPsychotherapistIDCard
+  entities:
+  - uid: 60
+    components:
+    - type: Transform
+      pos: 10.5,3.5
+      parent: 2
+- proto: ADTRDIDCard
+  entities:
+  - uid: 61
+    components:
+    - type: Transform
+      pos: 11.5,3.5
+      parent: 2
+- proto: ADTResidentIDCard
+  entities:
+  - uid: 62
+    components:
+    - type: Transform
+      pos: 12.5,3.5
+      parent: 2
+- proto: ADTRoboticistIDCard
+  entities:
+  - uid: 63
+    components:
+    - type: Transform
+      pos: 13.5,3.5
+      parent: 2
+- proto: ADTSavatistIDCard
+  entities:
+  - uid: 64
+    components:
+    - type: Transform
+      pos: 14.5,3.5
+      parent: 2
+- proto: ADTShepherdIDCard
+  entities:
+  - uid: 65
+    components:
+    - type: Transform
+      pos: 0.5,4.5
+      parent: 2
+- proto: ADTSheriffIDCard
+  entities:
+  - uid: 66
+    components:
+    - type: Transform
+      pos: 1.5,4.5
+      parent: 2
+- proto: ADTSpaceSecCadetIDCard
+  entities:
+  - uid: 67
+    components:
+    - type: Transform
+      pos: 2.5,4.5
+      parent: 2
+- proto: ADTSpaceSecCommanderIDCard
+  entities:
+  - uid: 68
+    components:
+    - type: Transform
+      pos: 3.5,4.5
+      parent: 2
+- proto: ADTSpaceSecOfficerIDCard
+  entities:
+  - uid: 69
+    components:
+    - type: Transform
+      pos: 4.5,4.5
+      parent: 2
+- proto: ADTSpaceSecPilotIDCard
+  entities:
+  - uid: 70
+    components:
+    - type: Transform
+      pos: 5.5,4.5
+      parent: 2
+- proto: ADTSpaceSecServiceIDCard
+  entities:
+  - uid: 71
+    components:
+    - type: Transform
+      pos: 6.5,4.5
+      parent: 2
+- proto: ADTStudentIDCard
+  entities:
+  - uid: 72
+    components:
+    - type: Transform
+      pos: 7.5,4.5
+      parent: 2
+- proto: ADTTavernkeepIDCard
+  entities:
+  - uid: 73
+    components:
+    - type: Transform
+      pos: 8.5,4.5
+      parent: 2
+- proto: ADTTherapistIDCard
+  entities:
+  - uid: 74
+    components:
+    - type: Transform
+      pos: 9.5,4.5
+      parent: 2
+- proto: ADTTouristIDCard
+  entities:
+  - uid: 75
+    components:
+    - type: Transform
+      pos: 10.5,4.5
+      parent: 2
+- proto: ADTTraderIDCard
+  entities:
+  - uid: 76
+    components:
+    - type: Transform
+      pos: 11.5,4.5
+      parent: 2
+- proto: ADTTraumatologistIDCard
+  entities:
+  - uid: 77
+    components:
+    - type: Transform
+      pos: 12.5,4.5
+      parent: 2
+- proto: ADTUSSPArmyCard
+  entities:
+  - uid: 78
+    components:
+    - type: Transform
+      pos: 13.5,4.5
+      parent: 2
+- proto: ADTUSSPArmyOfficerCard
+  entities:
+  - uid: 79
+    components:
+    - type: Transform
+      pos: 14.5,4.5
+      parent: 2
+- proto: ADTVisitorIDCard
+  entities:
+  - uid: 80
+    components:
+    - type: Transform
+      pos: 0.5,5.5
+      parent: 2
+- proto: ADTWaiterIDCard
+  entities:
+  - uid: 81
+    components:
+    - type: Transform
+      pos: 1.5,5.5
+      parent: 2
+- proto: ADTWelderIDCard
+  entities:
+  - uid: 82
+    components:
+    - type: Transform
+      pos: 2.5,5.5
+      parent: 2
+- proto: ADTXenoarchIDCard
+  entities:
+  - uid: 83
+    components:
+    - type: Transform
+      pos: 3.5,5.5
+      parent: 2
+- proto: AdminPDA
+  entities:
+  - uid: 84
+    components:
+    - type: Transform
+      pos: 4.5,5.5
+      parent: 2
+- proto: AnomalySpawn
+  entities:
+  - uid: 85
+    components:
+    - type: Transform
+      pos: 5.5,5.5
+      parent: 2
+- proto: AtmosPDA
+  entities:
+  - uid: 86
+    components:
+    - type: Transform
+      pos: 6.5,5.5
+      parent: 2
+- proto: BartenderPDA
+  entities:
+  - uid: 87
+    components:
+    - type: Transform
+      pos: 7.5,5.5
+      parent: 2
+- proto: BluespaceArtifact
+  entities:
+  - uid: 88
+    components:
+    - type: Transform
+      pos: 8.5,5.5
+      parent: 2
+- proto: BluespaceLocker
+  entities:
+  - uid: 89
+    components:
+    - type: Transform
+      pos: 9.5,5.5
+      parent: 2
+- proto: BotanistPDA
+  entities:
+  - uid: 90
+    components:
+    - type: Transform
+      pos: 10.5,5.5
+      parent: 2
+- proto: BoxerPDA
+  entities:
+  - uid: 91
+    components:
+    - type: Transform
+      pos: 11.5,5.5
+      parent: 2
+- proto: BreakerFlip
+  entities:
+  - uid: 92
+    components:
+    - type: Transform
+      pos: 12.5,5.5
+      parent: 2
+- proto: BrigmedicPDA
+  entities:
+  - uid: 93
+    components:
+    - type: Transform
+      pos: 13.5,5.5
+      parent: 2
+- proto: BureaucraticError
+  entities:
+  - uid: 94
+    components:
+    - type: Transform
+      pos: 14.5,5.5
+      parent: 2
+- proto: CBURNPDA
+  entities:
+  - uid: 95
+    components:
+    - type: Transform
+      pos: 0.5,6.5
+      parent: 2
+- proto: CEPDA
+  entities:
+  - uid: 96
+    components:
+    - type: Transform
+      pos: 1.5,6.5
+      parent: 2
+- proto: CMOPDA
+  entities:
+  - uid: 97
+    components:
+    - type: Transform
+      pos: 2.5,6.5
+      parent: 2
+- proto: CaptainPDA
+  entities:
+  - uid: 98
+    components:
+    - type: Transform
+      pos: 3.5,6.5
+      parent: 2
+- proto: CargoPDA
+  entities:
+  - uid: 99
+    components:
+    - type: Transform
+      pos: 4.5,6.5
+      parent: 2
+- proto: CentcomPDA
+  entities:
+  - uid: 100
+    components:
+    - type: Transform
+      pos: 5.5,6.5
+      parent: 2
+- proto: ChameleonAgentPDA
+  entities:
+  - uid: 101
+    components:
+    - type: Transform
+      pos: 6.5,6.5
+      parent: 2
+- proto: ChameleonPDA
+  entities:
+  - uid: 102
+    components:
+    - type: Transform
+      pos: 7.5,6.5
+      parent: 2
+- proto: ChaplainPDA
+  entities:
+  - uid: 103
+    components:
+    - type: Transform
+      pos: 8.5,6.5
+      parent: 2
+- proto: ChefPDA
+  entities:
+  - uid: 104
+    components:
+    - type: Transform
+      pos: 9.5,6.5
+      parent: 2
+- proto: ChemistryPDA
+  entities:
+  - uid: 105
+    components:
+    - type: Transform
+      pos: 10.5,6.5
+      parent: 2
+- proto: ClearPDA
+  entities:
+  - uid: 106
+    components:
+    - type: Transform
+      pos: 11.5,6.5
+      parent: 2
+- proto: ClericalError
+  entities:
+  - uid: 107
+    components:
+    - type: Transform
+      pos: 12.5,6.5
+      parent: 2
+- proto: ClosetSkeleton
+  entities:
+  - uid: 108
+    components:
+    - type: Transform
+      pos: 13.5,6.5
+      parent: 2
+- proto: ClownPDA
+  entities:
+  - uid: 109
+    components:
+    - type: Transform
+      pos: 14.5,6.5
+      parent: 2
+- proto: CluwnePDA
+  entities:
+  - uid: 110
+    components:
+    - type: Transform
+      pos: 0.5,7.5
+      parent: 2
+- proto: DeathsquadPDA
+  entities:
+  - uid: 111
+    components:
+    - type: Transform
+      pos: 1.5,7.5
+      parent: 2
+- proto: DerelictEngineerCyborgSpawn
+  entities:
+  - uid: 112
+    components:
+    - type: Transform
+      pos: 2.5,7.5
+      parent: 2
+- proto: DerelictGenericCyborgSpawn
+  entities:
+  - uid: 113
+    components:
+    - type: Transform
+      pos: 3.5,7.5
+      parent: 2
+- proto: DerelictJanitorCyborgSpawn
+  entities:
+  - uid: 114
+    components:
+    - type: Transform
+      pos: 4.5,7.5
+      parent: 2
+- proto: DerelictMedicalCyborgSpawn
+  entities:
+  - uid: 115
+    components:
+    - type: Transform
+      pos: 5.5,7.5
+      parent: 2
+- proto: DerelictMiningCyborgSpawn
+  entities:
+  - uid: 116
+    components:
+    - type: Transform
+      pos: 6.5,7.5
+      parent: 2
+- proto: DerelictSyndicateAssaultCyborgSpawn
+  entities:
+  - uid: 117
+    components:
+    - type: Transform
+      pos: 7.5,7.5
+      parent: 2
+- proto: DetectivePDA
+  entities:
+  - uid: 118
+    components:
+    - type: Transform
+      pos: 8.5,7.5
+      parent: 2
+- proto: DragonSpawn
+  entities:
+  - uid: 119
+    components:
+    - type: Transform
+      pos: 9.5,7.5
+      parent: 2
+- proto: ERTChaplainPDA
+  entities:
+  - uid: 120
+    components:
+    - type: Transform
+      pos: 10.5,7.5
+      parent: 2
+- proto: ERTEngineerPDA
+  entities:
+  - uid: 121
+    components:
+    - type: Transform
+      pos: 11.5,7.5
+      parent: 2
+- proto: ERTJanitorPDA
+  entities:
+  - uid: 122
+    components:
+    - type: Transform
+      pos: 12.5,7.5
+      parent: 2
+- proto: ERTLeaderPDA
+  entities:
+  - uid: 123
+    components:
+    - type: Transform
+      pos: 13.5,7.5
+      parent: 2
+- proto: ERTMedicPDA
+  entities:
+  - uid: 124
+    components:
+    - type: Transform
+      pos: 14.5,7.5
+      parent: 2
+- proto: ERTSecurityPDA
+  entities:
+  - uid: 125
+    components:
+    - type: Transform
+      pos: 0.5,8.5
+      parent: 2
+- proto: EngineerPDA
+  entities:
+  - uid: 126
+    components:
+    - type: Transform
+      pos: 1.5,8.5
+      parent: 2
+- proto: GasLeak
+  entities:
+  - uid: 127
+    components:
+    - type: Transform
+      pos: 2.5,8.5
+      parent: 2
+- proto: GreytideVirus
+  entities:
+  - uid: 128
+    components:
+    - type: Transform
+      pos: 3.5,8.5
+      parent: 2
+- proto: HoPPDA
+  entities:
+  - uid: 129
+    components:
+    - type: Transform
+      pos: 4.5,8.5
+      parent: 2
+- proto: HoSPDA
+  entities:
+  - uid: 130
+    components:
+    - type: Transform
+      pos: 5.5,8.5
+      parent: 2
+- proto: IAAIDCard
+  entities:
+  - uid: 131
+    components:
+    - type: Transform
+      pos: 6.5,8.5
+      parent: 2
+- proto: IonStorm
+  entities:
+  - uid: 132
+    components:
+    - type: Transform
+      pos: 7.5,8.5
+      parent: 2
+- proto: JanitorPDA
+  entities:
+  - uid: 133
+    components:
+    - type: Transform
+      pos: 8.5,8.5
+      parent: 2
+- proto: KudzuGrowth
+  entities:
+  - uid: 134
+    components:
+    - type: Transform
+      pos: 9.5,8.5
+      parent: 2
+- proto: LawyerPDA
+  entities:
+  - uid: 135
+    components:
+    - type: Transform
+      pos: 10.5,8.5
+      parent: 2
+- proto: LibrarianPDA
+  entities:
+  - uid: 136
+    components:
+    - type: Transform
+      pos: 11.5,8.5
+      parent: 2
+- proto: LoneOpsSpawn
+  entities:
+  - uid: 137
+    components:
+    - type: Transform
+      pos: 12.5,8.5
+      parent: 2
+- proto: MagistratIDCard
+  entities:
+  - uid: 138
+    components:
+    - type: Transform
+      pos: 13.5,8.5
+      parent: 2
+- proto: MassHallucinations
+  entities:
+  - uid: 139
+    components:
+    - type: Transform
+      pos: 14.5,8.5
+      parent: 2
+- proto: MedicalInternPDA
+  entities:
+  - uid: 140
+    components:
+    - type: Transform
+      pos: 0.5,9.5
+      parent: 2
+- proto: MedicalPDA
+  entities:
+  - uid: 141
+    components:
+    - type: Transform
+      pos: 1.5,9.5
+      parent: 2
+- proto: MimePDA
+  entities:
+  - uid: 142
+    components:
+    - type: Transform
+      pos: 2.5,9.5
+      parent: 2
+- proto: MimicVendorRule
+  entities:
+  - uid: 143
+    components:
+    - type: Transform
+      pos: 3.5,9.5
+      parent: 2
+- proto: MusicianPDA
+  entities:
+  - uid: 144
+    components:
+    - type: Transform
+      pos: 4.5,9.5
+      parent: 2
+- proto: NinjaPDA
+  entities:
+  - uid: 145
+    components:
+    - type: Transform
+      pos: 5.5,9.5
+      parent: 2
+- proto: NinjaSpawn
+  entities:
+  - uid: 146
+    components:
+    - type: Transform
+      pos: 6.5,9.5
+      parent: 2
+- proto: NukieAgentIDCard
+  entities:
+  - uid: 147
+    components:
+    - type: Transform
+      pos: 7.5,9.5
+      parent: 2
+- proto: ParadoxCloneSpawn
+  entities:
+  - uid: 148
+    components:
+    - type: Transform
+      pos: 8.5,9.5
+      parent: 2
+- proto: ParamedicPDA
+  entities:
+  - uid: 149
+    components:
+    - type: Transform
+      pos: 9.5,9.5
+      parent: 2
+- proto: PassengerPDA
+  entities:
+  - uid: 150
+    components:
+    - type: Transform
+      pos: 10.5,9.5
+      parent: 2
+- proto: PilotIDCard
+  entities:
+  - uid: 151
+    components:
+    - type: Transform
+      pos: 11.5,9.5
+      parent: 2
+- proto: PiratePDA
+  entities:
+  - uid: 152
+    components:
+    - type: Transform
+      pos: 12.5,9.5
+      parent: 2
+- proto: PowerGridCheck
+  entities:
+  - uid: 153
+    components:
+    - type: Transform
+      pos: 13.5,9.5
+      parent: 2
+- proto: PrisonerIDCard
+  entities:
+  - uid: 154
+    components:
+    - type: Transform
+      pos: 14.5,9.5
+      parent: 2
+- proto: PsychologistPDA
+  entities:
+  - uid: 155
+    components:
+    - type: Transform
+      pos: 0.5,10.5
+      parent: 2
+- proto: PunPunIDCard
+  entities:
+  - uid: 156
+    components:
+    - type: Transform
+      pos: 1.5,10.5
+      parent: 2
+- proto: QuartermasterPDA
+  entities:
+  - uid: 157
+    components:
+    - type: Transform
+      pos: 2.5,10.5
+      parent: 2
+- proto: ReporterPDA
+  entities:
+  - uid: 158
+    components:
+    - type: Transform
+      pos: 3.5,10.5
+      parent: 2
+- proto: ResearchAssistantPDA
+  entities:
+  - uid: 159
+    components:
+    - type: Transform
+      pos: 4.5,10.5
+      parent: 2
+- proto: RevenantSpawn
+  entities:
+  - uid: 160
+    components:
+    - type: Transform
+      pos: 5.5,10.5
+      parent: 2
+- proto: RnDPDA
+  entities:
+  - uid: 161
+    components:
+    - type: Transform
+      pos: 6.5,10.5
+      parent: 2
+- proto: SalvagePDA
+  entities:
+  - uid: 162
+    components:
+    - type: Transform
+      pos: 7.5,10.5
+      parent: 2
+- proto: SciencePDA
+  entities:
+  - uid: 163
+    components:
+    - type: Transform
+      pos: 8.5,10.5
+      parent: 2
+- proto: ScurretPDA
+  entities:
+  - uid: 164
+    components:
+    - type: Transform
+      pos: 9.5,10.5
+      parent: 2
+- proto: SecurityCadetPDA
+  entities:
+  - uid: 165
+    components:
+    - type: Transform
+      pos: 10.5,10.5
+      parent: 2
+- proto: SecurityPDA
+  entities:
+  - uid: 166
+    components:
+    - type: Transform
+      pos: 11.5,10.5
+      parent: 2
+- proto: SeniorCourierPDA
+  entities:
+  - uid: 167
+    components:
+    - type: Transform
+      pos: 12.5,10.5
+      parent: 2
+- proto: SeniorEngineerPDA
+  entities:
+  - uid: 168
+    components:
+    - type: Transform
+      pos: 13.5,10.5
+      parent: 2
+- proto: SeniorOfficerPDA
+  entities:
+  - uid: 169
+    components:
+    - type: Transform
+      pos: 14.5,10.5
+      parent: 2
+- proto: SeniorPhysicianPDA
+  entities:
+  - uid: 170
+    components:
+    - type: Transform
+      pos: 0.5,11.5
+      parent: 2
+- proto: SeniorResearcherPDA
+  entities:
+  - uid: 171
+    components:
+    - type: Transform
+      pos: 1.5,11.5
+      parent: 2
+- proto: ServiceWorkerPDA
+  entities:
+  - uid: 172
+    components:
+    - type: Transform
+      pos: 2.5,11.5
+      parent: 2
+- proto: ShowcaseIcon_ADTJobIconDeathSquad
+  entities:
+  - uid: 173
+    components:
+    - type: Transform
+      pos: 3.5,11.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTBarber
+  entities:
+  - uid: 174
+    components:
+    - type: Transform
+      pos: 4.5,11.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTBlueShieldOfficer
+  entities:
+  - uid: 175
+    components:
+    - type: Transform
+      pos: 5.5,11.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTCentcomConsultant
+  entities:
+  - uid: 176
+    components:
+    - type: Transform
+      pos: 6.5,11.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTCorrectionsOfficer
+  entities:
+  - uid: 177
+    components:
+    - type: Transform
+      pos: 7.5,11.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTPathologist
+  entities:
+  - uid: 178
+    components:
+    - type: Transform
+      pos: 8.5,11.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTSpaceSecCadet
+  entities:
+  - uid: 179
+    components:
+    - type: Transform
+      pos: 9.5,11.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTSpaceSecCommander
+  entities:
+  - uid: 180
+    components:
+    - type: Transform
+      pos: 10.5,11.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTSpaceSecOfficer
+  entities:
+  - uid: 181
+    components:
+    - type: Transform
+      pos: 11.5,11.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTSpaceSecPilot
+  entities:
+  - uid: 182
+    components:
+    - type: Transform
+      pos: 12.5,11.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTSpaceSecService
+  entities:
+  - uid: 183
+    components:
+    - type: Transform
+      pos: 13.5,11.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTUSSPArmyOfficer
+  entities:
+  - uid: 184
+    components:
+    - type: Transform
+      pos: 14.5,11.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTUSSPArmyPrivate
+  entities:
+  - uid: 185
+    components:
+    - type: Transform
+      pos: 0.5,12.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconAnomalist
+  entities:
+  - uid: 186
+    components:
+    - type: Transform
+      pos: 1.5,12.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconCargoniator
+  entities:
+  - uid: 187
+    components:
+    - type: Transform
+      pos: 2.5,12.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconMachine
+  entities:
+  - uid: 188
+    components:
+    - type: Transform
+      pos: 3.5,12.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconMagistrat
+  entities:
+  - uid: 189
+    components:
+    - type: Transform
+      pos: 4.5,12.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconProtector
+  entities:
+  - uid: 190
+    components:
+    - type: Transform
+      pos: 5.5,12.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconScavengeator
+  entities:
+  - uid: 191
+    components:
+    - type: Transform
+      pos: 6.5,12.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconSuperpupermattery
+  entities:
+  - uid: 192
+    components:
+    - type: Transform
+      pos: 7.5,12.5
+      parent: 2
+- proto: SleeperAgents
+  entities:
+  - uid: 193
+    components:
+    - type: Transform
+      pos: 8.5,12.5
+      parent: 2
+- proto: SlimesSpawnHorde
+  entities:
+  - uid: 194
+    components:
+    - type: Transform
+      pos: 9.5,12.5
+      parent: 2
+- proto: SmugglerStashVariationPass
+  entities:
+  - uid: 195
+    components:
+    - type: Transform
+      pos: 10.5,12.5
+      parent: 2
+- proto: SnakeSpawnHorde
+  entities:
+  - uid: 196
+    components:
+    - type: Transform
+      pos: 11.5,12.5
+      parent: 2
+- proto: SolarFlare
+  entities:
+  - uid: 197
+    components:
+    - type: Transform
+      pos: 12.5,12.5
+      parent: 2
+- proto: SpiderClownSpawnHorde
+  entities:
+  - uid: 198
+    components:
+    - type: Transform
+      pos: 13.5,12.5
+      parent: 2
+- proto: SpiderSpawnHorde
+  entities:
+  - uid: 199
+    components:
+    - type: Transform
+      pos: 14.5,12.5
+      parent: 2
+- proto: SyndiCommanderPDA
+  entities:
+  - uid: 200
+    components:
+    - type: Transform
+      pos: 0.5,13.5
+      parent: 2
+- proto: SyndiCorpsmanPDA
+  entities:
+  - uid: 201
+    components:
+    - type: Transform
+      pos: 1.5,13.5
+      parent: 2
+- proto: SyndiOperativePDA
+  entities:
+  - uid: 202
+    components:
+    - type: Transform
+      pos: 2.5,13.5
+      parent: 2
+- proto: SyndiPDA
+  entities:
+  - uid: 203
+    components:
+    - type: Transform
+      pos: 3.5,13.5
+      parent: 2
+- proto: TechnicalAssistantPDA
+  entities:
+  - uid: 204
+    components:
+    - type: Transform
+      pos: 4.5,13.5
+      parent: 2
+- proto: TramDriverPDA
+  entities:
+  - uid: 205
+    components:
+    - type: Transform
+      pos: 5.5,13.5
+      parent: 2
+- proto: VentClog
+  entities:
+  - uid: 206
+    components:
+    - type: Transform
+      pos: 6.5,13.5
+      parent: 2
+- proto: VisitorChaplainPDA
+  entities:
+  - uid: 207
+    components:
+    - type: Transform
+      pos: 7.5,13.5
+      parent: 2
+- proto: VisitorClownPDA
+  entities:
+  - uid: 208
+    components:
+    - type: Transform
+      pos: 8.5,13.5
+      parent: 2
+- proto: VisitorLawyerPDA
+  entities:
+  - uid: 209
+    components:
+    - type: Transform
+      pos: 9.5,13.5
+      parent: 2
+- proto: VisitorLibrarianPDA
+  entities:
+  - uid: 210
+    components:
+    - type: Transform
+      pos: 10.5,13.5
+      parent: 2
+- proto: VisitorMedicalPDA
+  entities:
+  - uid: 211
+    components:
+    - type: Transform
+      pos: 11.5,13.5
+      parent: 2
+- proto: VisitorMusicianPDA
+  entities:
+  - uid: 212
+    components:
+    - type: Transform
+      pos: 12.5,13.5
+      parent: 2
+- proto: VisitorPDA
+  entities:
+  - uid: 213
+    components:
+    - type: Transform
+      pos: 13.5,13.5
+      parent: 2
+- proto: WardenPDA
+  entities:
+  - uid: 214
+    components:
+    - type: Transform
+      pos: 14.5,13.5
+      parent: 2
+- proto: WizardPDA
+  entities:
+  - uid: 215
+    components:
+    - type: Transform
+      pos: 0.5,14.5
+      parent: 2
+- proto: WizardSpawn
+  entities:
+  - uid: 216
+    components:
+    - type: Transform
+      pos: 1.5,14.5
+      parent: 2
+- proto: XenobioIDCard
+  entities:
+  - uid: 217
+    components:
+    - type: Transform
+      pos: 2.5,14.5
+      parent: 2
+- proto: XenoborgIDCard
+  entities:
+  - uid: 218
+    components:
+    - type: Transform
+      pos: 3.5,14.5
+      parent: 2
+- proto: ZookeeperPDA
+  entities:
+  - uid: 219
+    components:
+    - type: Transform
+      pos: 4.5,14.5
+      parent: 2
+- proto: ShowcaseIcon_ADTJobIconDeathSquad
+  entities:
+  - uid: 220
+    components:
+    - type: Transform
+      pos: 5.5,14.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTBarber
+  entities:
+  - uid: 221
+    components:
+    - type: Transform
+      pos: 6.5,14.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTBlueShieldOfficer
+  entities:
+  - uid: 222
+    components:
+    - type: Transform
+      pos: 7.5,14.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTCentcomConsultant
+  entities:
+  - uid: 223
+    components:
+    - type: Transform
+      pos: 8.5,14.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTCorrectionsOfficer
+  entities:
+  - uid: 224
+    components:
+    - type: Transform
+      pos: 9.5,14.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTPathologist
+  entities:
+  - uid: 225
+    components:
+    - type: Transform
+      pos: 10.5,14.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTSpaceSecCadet
+  entities:
+  - uid: 226
+    components:
+    - type: Transform
+      pos: 11.5,14.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTSpaceSecCommander
+  entities:
+  - uid: 227
+    components:
+    - type: Transform
+      pos: 12.5,14.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTSpaceSecOfficer
+  entities:
+  - uid: 228
+    components:
+    - type: Transform
+      pos: 13.5,14.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTSpaceSecPilot
+  entities:
+  - uid: 229
+    components:
+    - type: Transform
+      pos: 14.5,14.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTSpaceSecService
+  entities:
+  - uid: 230
+    components:
+    - type: Transform
+      pos: 0.5,15.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTUSSPArmyOfficer
+  entities:
+  - uid: 231
+    components:
+    - type: Transform
+      pos: 1.5,15.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconADTUSSPArmyPrivate
+  entities:
+  - uid: 232
+    components:
+    - type: Transform
+      pos: 2.5,15.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconAnomalist
+  entities:
+  - uid: 233
+    components:
+    - type: Transform
+      pos: 3.5,15.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconCargoniator
+  entities:
+  - uid: 234
+    components:
+    - type: Transform
+      pos: 4.5,15.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconMachine
+  entities:
+  - uid: 235
+    components:
+    - type: Transform
+      pos: 5.5,15.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconMagistrat
+  entities:
+  - uid: 236
+    components:
+    - type: Transform
+      pos: 6.5,15.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconProtector
+  entities:
+  - uid: 237
+    components:
+    - type: Transform
+      pos: 7.5,15.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconScavengeator
+  entities:
+  - uid: 238
+    components:
+    - type: Transform
+      pos: 8.5,15.5
+      parent: 2
+- proto: ShowcaseIcon_JobIconSuperpupermattery
+  entities:
+  - uid: 239
+    components:
+    - type: Transform
+      pos: 9.5,15.5
+      parent: 2
+...
